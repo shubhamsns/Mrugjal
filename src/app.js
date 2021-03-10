@@ -7,12 +7,14 @@ const UnauthenticatedApp = React.lazy(() =>
   import('pages/unauthenticated-app'),
 );
 
-function App({ children }) {
-  const auth = useAuth();
+function App() {
+  const [user] = useAuth();
+
+  console.log(user);
 
   return (
     <React.Suspense fallback={<h3>Loading...</h3>}>
-      {false ? <AuthenticatedApp /> : <UnauthenticatedApp />}
+      {user ? <AuthenticatedApp /> : <UnauthenticatedApp />}
     </React.Suspense>
   );
 }

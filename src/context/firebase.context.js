@@ -8,8 +8,6 @@ FirebaseContext.displayName = 'FirebaseContext';
 function FirebaseProvider(props) {
   const value = React.useMemo(() => ({ firebaseApp, FieldValue }), []);
 
-  console.log(firebaseApp);
-
   // eslint-disable-next-line react/jsx-props-no-spreading
   return <FirebaseContext.Provider value={value} {...props} />;
 }

@@ -4,9 +4,10 @@ const AuthContext = React.createContext();
 AuthContext.displayName = 'AuthContext';
 
 function AuthProvider(props) {
-  const value = {};
+  const [user, setUser] = React.useState(null);
+  const memoizedValue = React.useMemo(() => [user, setUser], [user]);
 
-  return <AuthContext.Provider value={value} {...props} />;
+  return <AuthContext.Provider value={memoizedValue} {...props} />;
 }
 
 function useAuth() {
