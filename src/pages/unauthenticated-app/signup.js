@@ -19,7 +19,7 @@ function Signup() {
   const isInvalid = password === '' || emailAddress === '';
 
   React.useEffect(() => {
-    document.title = 'Signup - instagram';
+    document.title = 'Signup - Instagram';
   }, []);
 
   const handleSignup = async (event) => {

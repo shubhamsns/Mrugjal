@@ -2,6 +2,8 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
 
+const apiKey = process.env.REACT_APP_FIREBASE_API_KEY;
+
 const config = {
   apiKey: 'AIzaSyCtqXNCatpHW8ceRCF1PR3QTfD4Ln-fr-w',
   authDomain: 'instagram-6dc96.firebaseapp.com',
@@ -14,6 +16,7 @@ const config = {
 const firebaseApp = !firebase.apps.length
   ? firebase.initializeApp(config)
   : firebase.app();
+
 const { FieldValue } = firebase.firestore;
 
 export { firebaseApp, FieldValue };

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import { useAuth } from 'context/auth.context';
 
@@ -10,10 +10,16 @@ const UnauthenticatedApp = React.lazy(() =>
 function App() {
   const [user] = useAuth();
 
-  console.log(user);
-
   return (
-    <React.Suspense fallback={<h3>Loading...</h3>}>
+    <React.Suspense
+      fallback={
+        <div className="bg-gray-background">
+          <div className="mx-auto max-w-screen-lg">
+            <p className="text-center text-2xl">Loading...</p>
+          </div>
+        </div>
+      }
+    >
       {user ? <AuthenticatedApp /> : <UnauthenticatedApp />}
     </React.Suspense>
   );

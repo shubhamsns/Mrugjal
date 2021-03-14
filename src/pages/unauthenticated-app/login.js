@@ -6,7 +6,7 @@ import { Link, useHistory } from 'react-router-dom';
 function Login() {
   const history = useHistory();
   const { firebaseApp } = useFirebase();
-  const [, setUser] = useAuth();
+  // const [, setUser] = useAuth();
 
   const [emailAddress, setEmailAddress] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -15,7 +15,7 @@ function Login() {
   const isInvalid = password === '' || emailAddress === '';
 
   React.useEffect(() => {
-    document.title = 'Login - instagram';
+    document.title = 'Login - Instagram';
   }, []);
 
   const handleLogin = async (event) => {
@@ -25,7 +25,7 @@ function Login() {
       const user = await firebaseApp
         .auth()
         .signInWithEmailAndPassword(emailAddress, password);
-      setUser(user);
+      // setUser(user);
       history.push('/dashboard');
     } catch (error) {
       setEmailAddress('');
