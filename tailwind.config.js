@@ -27,6 +27,12 @@ module.exports = {
         primary: '#ed4956',
       },
     },
+
+    extend: {
+      animation: {
+        'spin-slow': 'spin 2s linear infinite',
+      },
+    },
   },
   variants: {
     extend: {

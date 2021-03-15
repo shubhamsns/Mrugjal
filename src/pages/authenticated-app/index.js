@@ -5,13 +5,15 @@ import { Dashboard } from './dashboard';
 
 function AuthenticatedApp() {
   return (
-    <Switch>
-      <Route path="/dashboard" component={Dashboard} />
+    <>
+      <Switch>
+        <Route path="/dashboard">
+          <Dashboard />
+        </Route>
 
-      <Route path="/*">
         <Redirect to="/dashboard" />
-      </Route>
-    </Switch>
+      </Switch>
+    </>
   );
 }
 

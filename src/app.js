@@ -2,27 +2,28 @@ import * as React from 'react';
 
 import { useAuth } from 'context/auth.context';
 
+import { FullpageLoader } from 'components/fullpage-loader';
+
 const AuthenticatedApp = React.lazy(() => import('pages/authenticated-app'));
 const UnauthenticatedApp = React.lazy(() =>
   import('pages/unauthenticated-app'),
 );
 
 function App() {
-  const [user] = useAuth();
+  const [user, setUser] = useAuth();
+
+  React.useEffect(() => {
+    const usr = localStorage.getItem('authUser');
+    if (usr) {
+      setUser(JSON.parse(usr));
+    }
+  }, [setUser]);
 
   return (
-    <React.Suspense
-      fallback={
-        <div className="bg-gray-background">
-          <div className="mx-auto max-w-screen-lg">
-            <p className="text-center text-2xl">Loading...</p>
-          </div>
-        </div>
-      }
-    >
+    <React.Suspense fallback={<FullpageLoader />}>
       {user ? <AuthenticatedApp /> : <UnauthenticatedApp />}
     </React.Suspense>
   );
 }
 
-export default App;
+export { App };

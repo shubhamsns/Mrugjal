@@ -1,13 +1,14 @@
 import * as React from 'react';
+
 import { useFirebase } from './firebase.context';
 
 const AuthContext = React.createContext();
 AuthContext.displayName = 'AuthContext';
 
 function AuthProvider(props) {
-  const [user, setUser] = React.useState(null);
-  const value = React.useMemo(() => [user, setUser], [user]);
   const { firebaseApp } = useFirebase();
+
+  const [user, setUser] = React.useState(null);
 
   React.useEffect(() => {
     const listener = firebaseApp.auth().onAuthStateChanged((authUser) => {
@@ -22,6 +23,8 @@ function AuthProvider(props) {
 
     return () => listener();
   }, [firebaseApp]);
+
+  const value = React.useMemo(() => [user, setUser], [user]);
 
   return <AuthContext.Provider value={value} {...props} />;
 }
