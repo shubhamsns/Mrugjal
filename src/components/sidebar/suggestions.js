@@ -7,8 +7,10 @@ import { SuggestedProfile } from './suggested-profile';
 
 function Suggestions({ userId, userFollowing }) {
   const [profiles, setProfiles] = useState();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     async function suggestedProfiles() {
       const response = await getSuggestedProfilesByUserId(
         userId,
@@ -20,13 +22,14 @@ function Suggestions({ userId, userFollowing }) {
     if (userId) {
       suggestedProfiles();
     }
+    setLoading(false);
   }, [userFollowing, userId]);
 
-  if (!profiles) {
+  if (loading) {
     return <Skeleton count={2} height={150} className="mt-5" />;
   }
 
-  if (!profiles.length) return null;
+  if (!profiles?.length) return null;
 
   return (
     <div className="rounded flex flex-col">

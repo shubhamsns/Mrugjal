@@ -6,12 +6,12 @@ import { MemoUser as User } from './user';
 
 function Sidebar() {
   const {
-    user: { fullName, username, userId, following },
+    user: { userInfo, username, userId, following, photoURL },
   } = useFirestoreUser();
 
   return (
     <div className="p-4">
-      <User username={username} fullName={fullName} />
+      <User username={username} userInfo={userInfo} userAvatar={photoURL} />
       <Suggestions userId={userId} userFollowing={following} />
     </div>
   );

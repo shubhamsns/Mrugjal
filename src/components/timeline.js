@@ -1,16 +1,39 @@
+/* eslint-disable no-nested-ternary */
 import Skeleton from 'react-loading-skeleton';
 
 import { useUserPhotos } from 'hooks/use-user-photos';
+import { Post } from './post';
 
 function Timeline() {
-  const { photos } = useUserPhotos();
+  const { photos, error, isLoading } = useUserPhotos();
 
-  console.log(photos);
+  if (isLoading) {
+    return (
+      <main className="container col-span-2">
+        <Skeleton className="mb-4" count={4} height={550} />
+      </main>
+    );
+  }
+
+  if (photos.length < 1) {
+    return (
+      <main className="container col-span-2">
+        {error && (
+          <p className="bg-white border border-gray-primary py-4 mt-1 px-2.5 text-lg font-semibold text-black-light rounded text-center">
+            There was a server error, please try again later!
+          </p>
+        )}
+        <p className="text-center text-2xl">Follow people to see photos!</p>
+      </main>
+    );
+  }
 
   return (
-    <div className="container col-span-2">
-      <p>I am the timeline</p>
-    </div>
+    <main className="container col-span-2">
+      {photos.map((photo) => (
+        <Post key={photo.photoId} postData={photo} />
+      ))}
+    </main>
   );
 }
 

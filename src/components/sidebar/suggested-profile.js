@@ -28,7 +28,7 @@ function SuggestedProfile({ suggestedUser, currentUserId }) {
         <Link to={`/p/${suggestedUser.username}`}>
           <img
             className="rounded-full w-8 flex mr-3"
-            src={`/images/avatars/${suggestedUser.username}.jpg`}
+            src={suggestedUser.photoURL}
             alt=""
           />
         </Link>

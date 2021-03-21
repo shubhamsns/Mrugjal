@@ -1,32 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
 
 import { useAuth } from 'context/auth.context';
 import { getUserDataByUserId } from 'services/firebase';
 
 function useFirestoreUser() {
-  const [currentUser, setCurrentUser] = useState({});
-  const [serverError, setServerError] = useState(null);
   const user = useAuth();
 
-  useEffect(() => {
-    async function getUserData() {
-      try {
-        const response = await getUserDataByUserId(user.uid);
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['current-user-data', user.uid],
+    queryFn: () => getUserDataByUserId(user.uid),
+    enabled: Boolean(user?.uid),
+  });
 
-        // check to see if the state object is egual with the new object and return early else set state with returned object
-        if (currentUser.userId === response.userId) return;
-        setCurrentUser(response);
-      } catch (error) {
-        setServerError(error.message);
-      }
-    }
-
-    if (user?.uid) {
-      getUserData();
-    }
-  }, [currentUser, user]);
-
-  return { user: currentUser, error: serverError };
+  return { user: data ?? {}, error: error?.message, isLoading };
 }
 
 export { useFirestoreUser };

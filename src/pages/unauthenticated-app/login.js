@@ -1,36 +1,42 @@
-import { useFirebase } from 'context/firebase.context';
 import * as React from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import { useMutation } from 'react-query';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+
+import { useFirebase } from 'context/firebase.context';
+import { Form, Input } from 'components/form';
+import { UserLoginSchema } from 'helpers/validations';
 
 function Login() {
   const history = useHistory();
   const { firebaseApp } = useFirebase();
 
-  const [emailAddress, setEmailAddress] = React.useState('');
-  const [password, setPassword] = React.useState('');
-
   const [error, setError] = React.useState('');
-  const isInvalid = password === '' || emailAddress === '';
 
   React.useEffect(() => {
     document.title = 'Login - Instagram';
   }, []);
 
-  const handleLogin = async (event) => {
-    event.preventDefault();
+  const { control, errors, handleSubmit, reset } = useForm({
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+    resolver: yupResolver(UserLoginSchema),
+  });
 
-    try {
-      const user = await firebaseApp
-        .auth()
-        .signInWithEmailAndPassword(emailAddress, password);
-      // setUser(user);
-      history.push('/dashboard');
-    } catch (error) {
-      setEmailAddress('');
-      setPassword('');
-      setError(error.message);
-    }
-  };
+  const { mutate, isLoading } = useMutation(
+    ({ email, password }) =>
+      firebaseApp.auth().signInWithEmailAndPassword(email, password),
+    {
+      onSuccess: () => history.push('/'),
+      onError: (error) => {
+        setError(error.message);
+        reset();
+      },
+    },
+  );
 
   return (
     <div className="container flex mx-auto max-w-screen-md items-center h-screen">
@@ -52,33 +58,38 @@ function Login() {
 
           {error && <p className="mb-4 text-xs text-red-primary">{error}</p>}
 
-          <form onSubmit={handleLogin} method="POST">
-            <input
+          <Form
+            errors={errors}
+            control={control}
+            onSubmit={handleSubmit(mutate)}
+            className="w-full"
+          >
+            <Input
+              name="email"
+              // label="Email"
               aria-label="Enter your email address"
               type="text"
               placeholder="Email address"
-              className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2"
-              onChange={({ target }) => setEmailAddress(target.value)}
-              value={emailAddress}
             />
-            <input
+
+            <Input
+              // label="Password"
+              name="password"
               aria-label="Enter your password"
               type="password"
               placeholder="Password"
-              className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2"
-              onChange={({ target }) => setPassword(target.value)}
-              value={password}
             />
+
             <button
-              disabled={isInvalid}
+              disabled={isLoading}
               type="submit"
-              className={`bg-blue-medium text-white w-full
-               rounded h-8 font-bold ${isInvalid && 'opacity-50'}`}
+              className="bg-blue-medium text-white w-full rounded h-8 font-bold"
             >
-              Login
+              {isLoading ? 'Logging in...' : 'Login'}
             </button>
-          </form>
+          </Form>
         </div>
+
         <div className="flex justify-center items-center flex-col w-full bg-white p-4 rounded border border-gray-primary">
           <p className="text-sm">
             Don't have an account?{` `}

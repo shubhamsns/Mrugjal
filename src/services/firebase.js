@@ -19,6 +19,17 @@ async function doesUserExist(username) {
 }
 
 /**
+ * Function used to create a new user in the firestore
+ *
+ * @param {object} userObject The user data to be added to the collection
+ *
+ * @return {Promise<void>} A promise of type void.
+ */
+async function createFirestoreUser(userObject) {
+  return database.collection('users').add(userObject);
+}
+
+/**
  * Function used to query data for a specific user by it's user `ID`
  *
  * @param {string} userId The user id to be queried by
@@ -113,6 +124,7 @@ async function updateUserFollowersField(
         : FieldValue.arrayUnion(userId),
     });
 }
+
 /**
  * Function used to get all the photos of a user that is followed by current logged in user by it's `ID`
  *
@@ -122,7 +134,6 @@ async function updateUserFollowersField(
  * @return {Promise<Array<{}>>} A promise of type object array.
  */
 async function getFollowingUserPhotosByUserId(userId, userFollowing) {
-  // userFollowing : [2,3,4]
   const { docs } = await database
     .collection('photos')
     .where('userId', 'in', userFollowing)
@@ -136,16 +147,26 @@ async function getFollowingUserPhotosByUserId(userId, userFollowing) {
   const photosWithUserData = await Promise.all(
     userFollowedPhotos.map(async (photo) => {
       let userLikedPhoto = false;
+      let userSavedPhoto = false;
 
       if (photo.likes.includes(userId)) {
         userLikedPhoto = true;
       }
 
-      const { username, docId } = await getUserDataByUserId(photo.userId);
+      if (photo.saved.includes(userId)) {
+        userSavedPhoto = true;
+      }
 
-      const user = { username, docId };
+      const {
+        username,
+        photoURL,
+        verifiedUser,
+        docId,
+      } = await getUserDataByUserId(photo.userId);
 
-      return { user, ...photo, userLikedPhoto };
+      const user = { username, photoURL, verifiedUser, docId };
+
+      return { user, ...photo, userLikedPhoto, userSavedPhoto };
     }),
   );
 
@@ -174,6 +195,7 @@ async function getUserPhotosByUserId(userId, limitQuery = 25) {
 
 export {
   doesUserExist,
+  createFirestoreUser,
   getUserDataByUserId,
   getSuggestedProfilesByUserId,
   updateUserFollowersField,

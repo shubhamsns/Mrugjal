@@ -10,9 +10,11 @@ function useUserPhotos() {
   const user = useAuth();
 
   const [serverError, setServerError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [userPhotos, setUserPhotos] = useState(null);
 
   useEffect(() => {
+    setIsLoading(true);
     async function getTimelinePhotos() {
       try {
         const { following } = await getUserDataByUserId(user.uid);
@@ -52,9 +54,10 @@ function useUserPhotos() {
     if (user?.uid) {
       getTimelinePhotos();
     }
+    setIsLoading(false);
   }, [user, userPhotos]);
 
-  return { photos: userPhotos, error: serverError };
+  return { photos: userPhotos ?? [], error: serverError, isLoading };
 }
 
 export { useUserPhotos };
