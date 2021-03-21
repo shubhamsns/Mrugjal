@@ -12,6 +12,11 @@ function FirebaseProvider(props) {
   return <FirebaseContext.Provider value={value} {...props} />;
 }
 
+/**
+ * A hook for fast access to `firebase context`
+ *
+ * @returns {{firebaseApp: object; FieldValue: object}}
+ */
 function useFirebase() {
   const context = React.useContext(FirebaseContext);
 

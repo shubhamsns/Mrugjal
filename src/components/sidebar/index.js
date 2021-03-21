@@ -1,22 +1,18 @@
 import React from 'react';
 
-import { useUser } from 'hooks/use-user';
+import { useFirestoreUser } from 'hooks/use-firestore-user';
 import { Suggestions } from './suggestions';
 import { MemoUser as User } from './user';
 
 function Sidebar() {
   const {
-    user: { docId, fullName, username, userId, following },
-  } = useUser();
+    user: { fullName, username, userId, following },
+  } = useFirestoreUser();
 
   return (
     <div className="p-4">
       <User username={username} fullName={fullName} />
-      <Suggestions
-        userId={userId}
-        following={following}
-        loggedInUserDocId={docId}
-      />
+      <Suggestions userId={userId} userFollowing={following} />
     </div>
   );
 }

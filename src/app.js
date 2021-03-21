@@ -10,14 +10,7 @@ const UnauthenticatedApp = React.lazy(() =>
 );
 
 function App() {
-  const [user, setUser] = useAuth();
-
-  React.useEffect(() => {
-    const usr = localStorage.getItem('authUser');
-    if (usr) {
-      setUser(JSON.parse(usr));
-    }
-  }, [setUser]);
+  const user = useAuth();
 
   return (
     <React.Suspense fallback={<FullpageLoader />}>

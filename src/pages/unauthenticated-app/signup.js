@@ -1,14 +1,12 @@
 import * as React from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
-import { useAuth } from 'context/auth.context';
 import { useFirebase } from 'context/firebase.context';
-import { doesUsernameExist } from 'services/firebase';
+import { doesUserExist } from 'services/firebase';
 
 function Signup() {
   const history = useHistory();
   const { firebaseApp } = useFirebase();
-  const [, setUser] = useAuth();
 
   const [username, setUsername] = React.useState('');
   const [fullName, setFullName] = React.useState('');
@@ -24,7 +22,7 @@ function Signup() {
 
   const handleSignup = async (event) => {
     event.preventDefault();
-    const usernameExists = await doesUsernameExist(username);
+    const usernameExists = await doesUserExist(username);
 
     if (usernameExists.length) {
       setUsername('');

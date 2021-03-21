@@ -1,4 +1,3 @@
-import { useAuth } from 'context/auth.context';
 import { useFirebase } from 'context/firebase.context';
 import * as React from 'react';
 import { Link, useHistory } from 'react-router-dom';
@@ -6,7 +5,6 @@ import { Link, useHistory } from 'react-router-dom';
 function Login() {
   const history = useHistory();
   const { firebaseApp } = useFirebase();
-  // const [, setUser] = useAuth();
 
   const [emailAddress, setEmailAddress] = React.useState('');
   const [password, setPassword] = React.useState('');
