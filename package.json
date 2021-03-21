@@ -19,7 +19,10 @@
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint src --ext .js,.jsx .",
+    "lint:fix": "npm run lint -- --fix",
+    "serve": "serve --no-clipboard --single --listen 8811 build"
   },
   "eslintConfig": {
     "extends": [
