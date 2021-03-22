@@ -1,10 +1,10 @@
-import * as React from 'react';
+import { useEffect } from 'react';
 
-import { Timeline } from 'components/timeline';
 import { Sidebar } from 'components/sidebar';
+import { Timeline } from 'components/timeline/index';
 
 function Dashboard() {
-  React.useEffect(() => {
+  useEffect(() => {
     document.title = 'Dashboard - instagram';
   }, []);
 

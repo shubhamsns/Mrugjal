@@ -193,6 +193,78 @@ async function getUserPhotosByUserId(userId, limitQuery = 25) {
     .sort((a, b) => b.dateCreated - a.dateCreated);
 }
 
+/**
+ * Function used to update the post `likes field`
+ *
+ * @param {string} postDocId The post document id
+ * @param {string} userId The user id of the current logged in user
+ * @param {boolean} [userLikedStatus=false] The liked status of the post
+ *
+ * @return {Promise<void>} A promise of type void.
+ */
+async function updatePostLikesField(
+  postDocId,
+  userId,
+  userLikedStatus = false,
+) {
+  return database
+    .collection('photos')
+    .doc(postDocId)
+    .update({
+      likes: userLikedStatus
+        ? FieldValue.arrayRemove(userId)
+        : FieldValue.arrayUnion(userId),
+    });
+}
+
+/**
+ * Function used to update the post `saved field`
+ *
+ * @param {string} userDocId The user document id of the post user owner
+ * @param {string} userId The user id of the current logged in user
+ * @param {boolean} [userSavedStatus=false] The saved status of the post
+ *
+ * @return {Promise<void>} A promise of type void.
+ */
+async function updatePostSavedField(
+  userDocId,
+  userId,
+  userSavedStatus = false,
+) {
+  return database
+    .collection('photos')
+    .doc(userDocId)
+    .update({
+      saved: userSavedStatus
+        ? FieldValue.arrayRemove(userId)
+        : FieldValue.arrayUnion(userId),
+    });
+}
+
+/**
+ * Function used to update the user `savedPosts field`
+ *
+ * @param {string} userDocId The user document id
+ * @param {string} postId The post id of post to be added to saved
+ * @param {boolean} [userSavedStatus=false] The saved status of the current post
+ *
+ * @return {Promise<void>} A promise of type void.
+ */
+async function updateUserSavedPostsField(
+  userDocId,
+  postId,
+  userSavedStatus = false,
+) {
+  return database
+    .collection('users')
+    .doc(userDocId)
+    .update({
+      savedPosts: userSavedStatus
+        ? FieldValue.arrayRemove(postId)
+        : FieldValue.arrayUnion(postId),
+    });
+}
+
 export {
   doesUserExist,
   createFirestoreUser,
@@ -202,4 +274,7 @@ export {
   updateUserFollowingField,
   getUserPhotosByUserId,
   getFollowingUserPhotosByUserId,
+  updatePostLikesField,
+  updateUserSavedPostsField,
+  updatePostSavedField,
 };

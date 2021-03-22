@@ -9,8 +9,12 @@ function AuthenticatedRoutes() {
     <Switch>
       <Route path="/dashboard" component={Dashboard} />
 
-      <Route path="/p/:username">
+      <Route path="/u/:username">
         <h1>Username</h1>
+      </Route>
+
+      <Route path="/p/:imageId">
+        <h1>image here</h1>
       </Route>
 
       <Redirect to="/dashboard" />

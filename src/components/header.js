@@ -66,7 +66,7 @@ function Header() {
             </button>
 
             <div className="flex items-center cursor-pointer">
-              <Link to={`/p/${user?.username}`}>
+              <Link to={`/u/${user?.username}`}>
                 {user?.photoURL ? (
                   <img
                     className="rounded-full h-8 w-8 flex"

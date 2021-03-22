@@ -9,7 +9,7 @@ function User({ username, userInfo, userAvatar }) {
 
   return (
     <Link
-      to={`/p/${username}`}
+      to={`/u/${username}`}
       className="grid grid-cols-4 gap-4 mb-6 items-center"
     >
       <div className="flex items-center justify-between col-span-1">
