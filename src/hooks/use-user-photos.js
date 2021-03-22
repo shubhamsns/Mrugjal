@@ -1,63 +1,31 @@
-import { useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
 
-import { useAuth } from 'context/auth.context';
-import {
-  getFollowingUserPhotosByUserId,
-  getUserDataByUserId,
-} from 'services/firebase';
+import { getFollowingUserPhotosByUserId } from 'services/firebase';
+import { useFirestoreUser } from './use-firestore-user';
 
 function useUserPhotos() {
-  const user = useAuth();
+  const {
+    user: { following, uid },
+  } = useFirestoreUser();
 
-  const [serverError, setServerError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [userPhotos, setUserPhotos] = useState(null);
+  const query = useQuery({
+    queryKey: 'user-photos',
+    queryFn: () => getFollowingUserPhotosByUserId(uid, following),
+    select: (data) => {
+      data.sort((a, b) => b.dateCreated - a.dateCreated);
 
-  useEffect(() => {
-    setIsLoading(true);
-    async function getTimelinePhotos() {
-      try {
-        const { following } = await getUserDataByUserId(user.uid);
+      // TODO: implement infinite queries
+      // data.forEach((photo, idx) => {
+      //   if (photo.photoId === data[idx].photoId) return;
+      //   return (oldPhotos) => [...oldPhotos, photo];
+      // });
 
-        let followedUserPhotos = [];
+      return data;
+    },
+    enabled: Boolean(following?.length),
+  });
 
-        if (following.length > 0) {
-          // if we follow other users get those photos and set state with the returned photos
-
-          followedUserPhotos = await getFollowingUserPhotosByUserId(
-            user.uid,
-            following,
-          );
-
-          // Sorts the user photos by date returning the newest first.
-          followedUserPhotos.sort((a, b) => b.dateCreated - a.dateCreated);
-
-          if (userPhotos) {
-            followedUserPhotos.forEach((photo, idx) => {
-              if (photo.photoId === userPhotos[idx].photoId) return;
-
-              setUserPhotos((oldPhotos) => [...oldPhotos, photo]);
-            });
-          } else {
-            setUserPhotos(followedUserPhotos);
-          }
-        } else {
-          // if we do not follow other users set state with the initial empty array
-
-          setUserPhotos(followedUserPhotos);
-        }
-      } catch (error) {
-        setServerError(error.message);
-      }
-    }
-
-    if (user?.uid) {
-      getTimelinePhotos();
-    }
-    setIsLoading(false);
-  }, [user, userPhotos]);
-
-  return { photos: userPhotos ?? [], error: serverError, isLoading };
+  return query ?? {};
 }
 
 export { useUserPhotos };

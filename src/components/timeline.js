@@ -5,7 +5,7 @@ import { useUserPhotos } from 'hooks/use-user-photos';
 import { Post } from './post';
 
 function Timeline() {
-  const { photos, error, isLoading } = useUserPhotos();
+  const { data: photos, isError, isLoading } = useUserPhotos();
 
   if (isLoading) {
     return (
@@ -15,10 +15,10 @@ function Timeline() {
     );
   }
 
-  if (photos.length < 1) {
+  if (photos?.length < 1) {
     return (
       <main className="container col-span-2">
-        {error && (
+        {isError && (
           <p className="bg-white border border-gray-primary py-4 mt-1 px-2.5 text-lg font-semibold text-black-light rounded text-center">
             There was a server error, please try again later!
           </p>
@@ -30,7 +30,7 @@ function Timeline() {
 
   return (
     <main className="container col-span-2">
-      {photos.map((photo) => (
+      {photos?.map((photo) => (
         <Post key={photo.photoId} postData={photo} />
       ))}
     </main>
