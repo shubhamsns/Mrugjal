@@ -5,15 +5,19 @@ import {
   updateUserFollowersField,
   updateUserFollowingField,
 } from 'services/firebase';
+import { useQueryClient } from 'react-query';
 
 function SuggestedProfile({ suggestedUser, currentUserId }) {
   const [isUserFollowed, setIsUserFollowed] = useState(false);
+  const queryClient = useQueryClient();
 
   async function handleFollowUserAction() {
     setIsUserFollowed(true);
 
     await updateUserFollowingField(suggestedUser.userId, currentUserId, false);
     await updateUserFollowersField(suggestedUser.docId, currentUserId, false);
+
+    queryClient.invalidateQueries(['user']);
   }
 
   const isSuggestedUserFollower = suggestedUser.following.includes(

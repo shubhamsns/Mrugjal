@@ -7,7 +7,7 @@ function useFirestoreUser() {
   const user = useAuth();
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['current-user-data', user.uid],
+    queryKey: ['user', 'firestore', user.uid],
     queryFn: () => getUserDataByUserId(user.uid),
     enabled: Boolean(user?.uid),
   });

@@ -265,6 +265,23 @@ async function updateUserSavedPostsField(
     });
 }
 
+/**
+ * Function used to add a comment to a given post
+ *
+ * @param {string} postDocId The post document id to be updated
+ * @param {string} newPostComment The comment to be added
+ *
+ * @return {Promise<void>} A promise of type void.
+ */
+async function addPostComments(postDocId, newPostComment) {
+  return database
+    .collection('photos')
+    .doc(postDocId)
+    .update({
+      comments: FieldValue.arrayUnion(newPostComment),
+    });
+}
+
 export {
   doesUserExist,
   createFirestoreUser,
@@ -277,4 +294,5 @@ export {
   updatePostLikesField,
   updateUserSavedPostsField,
   updatePostSavedField,
+  addPostComments,
 };

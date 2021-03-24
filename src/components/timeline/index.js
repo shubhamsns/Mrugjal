@@ -15,7 +15,7 @@ function Timeline() {
     );
   }
 
-  if (photos?.length < 1) {
+  if (!photos) {
     return (
       <main className="container col-span-2">
         {isError && (

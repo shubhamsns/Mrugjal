@@ -2,10 +2,18 @@ import { Link } from 'react-router-dom';
 
 import { useFirebase } from 'context/firebase.context';
 import { useFirestoreUser } from 'hooks/use-firestore-user';
+import { useQueryClient } from 'react-query';
 
 function Header() {
   const { firebaseApp } = useFirebase();
   const { user, isLoading } = useFirestoreUser();
+  const queryCliet = useQueryClient();
+
+  const handleLogout = () => {
+    firebaseApp.auth().signOut();
+    queryCliet.clear();
+    window.location.reload();
+  };
 
   return (
     <header className="h-16 bg-white border-b border-gray-primary mb-8">
@@ -44,9 +52,9 @@ function Header() {
             <button
               type="button"
               title="Sign Out"
-              onClick={() => firebaseApp.auth().signOut()}
+              onClick={handleLogout}
               onKeyDown={(e) => {
-                if (e.key === 'Enter') firebaseApp.auth().signOut();
+                if (e.key === 'Enter') handleLogout();
               }}
             >
               <svg

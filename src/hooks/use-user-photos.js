@@ -5,27 +5,26 @@ import { useFirestoreUser } from './use-firestore-user';
 
 function useUserPhotos() {
   const {
-    user: { following, uid },
+    user: { following, userId },
   } = useFirestoreUser();
 
   const query = useQuery({
-    queryKey: 'user-photos',
-    queryFn: () => getFollowingUserPhotosByUserId(uid, following),
+    queryKey: ['user', 'timeline'],
+    queryFn: () => getFollowingUserPhotosByUserId(userId, following),
     select: (data) => {
       data.sort((a, b) => b.dateCreated - a.dateCreated);
 
-      // TODO: implement infinite queries
-      // data.forEach((photo, idx) => {
-      //   if (photo.photoId === data[idx].photoId) return;
-      //   return (oldPhotos) => [...oldPhotos, photo];
-      // });
+      data.forEach((photo, idx) =>
+        // if (photo.photoId === data[idx].photoId) return;
+        (oldPhotos) => [...oldPhotos, photo],
+      );
 
       return data;
     },
     enabled: Boolean(following?.length),
   });
 
-  return query ?? {};
+  return query;
 }
 
 export { useUserPhotos };

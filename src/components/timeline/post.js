@@ -7,7 +7,6 @@ import { Footer } from './footer';
 import { Comments } from './comments';
 
 function Post({ postData }) {
-  console.log(postData);
   return (
     <div className="rounded col-span-4 bg-white border border-gray-primary mb-12">
       <Header user={postData.user} />
@@ -42,6 +41,7 @@ function Post({ postData }) {
     </div>
   );
 }
+
 Post.propTypes = {
   postData: PropTypes.exact({
     caption: PropTypes.string.isRequired,
@@ -49,7 +49,6 @@ Post.propTypes = {
     dateCreated: PropTypes.number.isRequired,
     docId: PropTypes.string.isRequired,
     imageSrc: PropTypes.string.isRequired,
-    sourceURL: PropTypes.string.isRequired,
     likes: PropTypes.arrayOf(PropTypes.string),
     saved: PropTypes.arrayOf(PropTypes.string),
     photoId: PropTypes.string.isRequired,
@@ -63,4 +62,5 @@ Post.propTypes = {
     }).isRequired,
   }).isRequired,
 };
+
 export { Post };

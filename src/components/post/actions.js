@@ -19,7 +19,6 @@ function Actions({
   handleCommentFocus,
   link,
 }) {
-  console.log(likedPost);
   const { user } = useFirestoreUser();
 
   const [toggleLikedAction, setToggleLikedAction] = useState(likedPost);

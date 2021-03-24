@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
+import { AddComment } from 'components/post/add-comment';
+
 function Comments({
   docId,
   postComments,
@@ -70,9 +72,9 @@ function Comments({
         </p>
       </div>
 
-      {/* {showAddPost && (
+      {showAddPost && (
         <AddComment postDocId={docId} setPostComments={setComments} />
-      )} */}
+      )}
     </>
   );
 }
