@@ -1,4 +1,11 @@
 {
+  //
+  "workbench.colorCustomizations": {
+    "titleBar.activeForeground": "#fff",
+    "titleBar.inactiveForeground": "#fff",
+    "titleBar.activeBackground": "#E1306C",
+    "titleBar.inactiveBackground": "#E1306CCC"
+  },
   "eslint.workingDirectories": ["."],
   // These are all my auto-save configs
   "editor.formatOnSave": true,

@@ -282,6 +282,16 @@ async function addPostComments(postDocId, newPostComment) {
     });
 }
 
+/**
+ * Function used to create a new post data
+ *
+ * @param {object} postObject The post data to be added to the collection
+ * @return {Promise<void>} A promise of type void.
+ */
+async function createPost(postObject) {
+  return database.collection('photos').add(postObject);
+}
+
 export {
   doesUserExist,
   createFirestoreUser,
@@ -295,4 +305,5 @@ export {
   updateUserSavedPostsField,
   updatePostSavedField,
   addPostComments,
+  createPost,
 };
