@@ -5,6 +5,7 @@ import { useFirestoreUser } from 'hooks/use-firestore-user';
 import { useQueryClient } from 'react-query';
 import { useState } from 'react';
 import { AddPost } from './post/add-post';
+import { CloudinaryImage } from './cloudinary-image';
 
 function Header() {
   const history = useHistory();
@@ -111,10 +112,12 @@ function Header() {
             <div className="flex items-center cursor-pointer">
               <Link to={`/u/${user?.username}`}>
                 {user?.photoURL ? (
-                  <img
-                    className="rounded-full h-8 w-8 flex"
+                  <CloudinaryImage
                     src={user.photoURL}
-                    alt={`${user.username} profile`}
+                    alt={`${user.displayName} profile`}
+                    size="80"
+                    type="profile"
+                    className="rounded-full h-7 w-7"
                   />
                 ) : (
                   <svg

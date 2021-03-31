@@ -65,6 +65,7 @@ function Login() {
             className="w-full"
           >
             <Input
+              autoFocus
               name="email"
               // label="Email"
               aria-label="Enter your email address"

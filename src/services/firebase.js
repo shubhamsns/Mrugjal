@@ -292,6 +292,44 @@ async function createPost(postObject) {
   return database.collection('photos').add(postObject);
 }
 
+/**
+ * Function used to query data for a specific user by `username`
+ *
+ * @param {string} username Username to be queried by
+ * @return {Promise<{}>} A promise of type object.
+ */
+async function getUserDataByUsername(username) {
+  const { docs } = await database
+    .collection('users')
+    .where('username', '==', username)
+    .get();
+
+  const [user] = docs.map((doc) => ({
+    ...doc.data(),
+    docId: doc.id,
+  }));
+
+  return user;
+}
+
+/**
+ * Function used to get all the photos that are added in the current logged in user `savedPosts` field
+ *
+ * @param {string[]} userSavedPosts An array containing all the saved posts of the current user
+ *
+ * @return {Promise<Array<{}>>} A promise of type object array.
+ */
+async function getSavedPosts(userSavedPosts) {
+  const { docs } = await database
+    .collection('photos')
+    .where('photoId', 'in', userSavedPosts)
+    .get();
+
+  return docs
+    .map((doc) => ({ ...doc.data(), docId: doc.id }))
+    .sort((a, b) => b.dateCreated - a.dateCreated);
+}
+
 export {
   doesUserExist,
   createFirestoreUser,
@@ -306,4 +344,6 @@ export {
   updatePostSavedField,
   addPostComments,
   createPost,
+  getSavedPosts,
+  getUserDataByUsername,
 };
