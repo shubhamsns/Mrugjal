@@ -95,7 +95,7 @@ function Header() {
               showHeader
               isOpen={logoutModalStatus}
               onClose={() => setLogoutModalStatus(false)}
-              title="Are you sure you?"
+              title="Are you sure?"
             >
               <div className="flex justify-around p-4">
                 <button
