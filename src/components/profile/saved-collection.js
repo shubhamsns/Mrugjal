@@ -1,8 +1,8 @@
+import { Gallery } from 'components/gallery';
 import PropTypes from 'prop-types';
 import { useQuery } from 'react-query';
 
 import { getSavedPosts } from 'services/firebase';
-import Gallery from 'components/gallery';
 
 function SavedCollection({ userSavedPosts }) {
   const { isLoading, data: savedPhotos } = useQuery({

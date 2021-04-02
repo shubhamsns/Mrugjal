@@ -32,8 +32,8 @@ function AddPost({ userData, displayModal, setDisplayStatus }) {
   }
 
   function handleModalClose() {
-    setUploadedImage(null);
     setPreviewImage(null);
+    setUploadedImage(null);
     setPostMessage('');
     setDisplayStatus((prev) => !prev);
   }

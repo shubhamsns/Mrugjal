@@ -330,6 +330,47 @@ async function getSavedPosts(userSavedPosts) {
     .sort((a, b) => b.dateCreated - a.dateCreated);
 }
 
+/**
+ * Function used to query data for a specific user by a `keyword`
+ *
+ * @param {string} keyword The search term to be queried by
+ * @param {number} [limitQuery=8] Limit query results.
+ * @return {Promise<{}>} A promise of type object.
+ */
+async function getUserDataByKeyword(keyword, limitQuery = 8) {
+  const { docs } = await database
+    .collection('users')
+    .orderBy('username')
+    .startAt(keyword)
+    .endAt(`${keyword}\uf8ff`)
+    .limit(limitQuery)
+    .get();
+
+  return docs.map((doc) => ({ ...doc.data(), docId: doc.id }));
+}
+
+/**
+ * Function used to get explore photos excluding loggedIn user own photos. It limits the queried results to `21` by default and sorts it by newest first
+ *
+ * @param {string} userId The user id to be excluded
+ * @param {number} [limitQuery=21] Limit photos query.
+ *
+ * @return {Promise<Array<{}>>} A promise of type object array.
+ */
+async function getExplorePhotos(userId, limitQuery = 21) {
+  const { docs } = await database
+    .collection('photos')
+    .where('userId', '!=', userId)
+    .orderBy('userId')
+    .orderBy('dateCreated', 'desc')
+    .limit(limitQuery)
+    .get();
+
+  const photos = docs.map((doc) => ({ ...doc.data(), docId: doc.id }));
+
+  return photos;
+}
+
 export {
   doesUserExist,
   createFirestoreUser,
@@ -346,4 +387,6 @@ export {
   createPost,
   getSavedPosts,
   getUserDataByUsername,
+  getUserDataByKeyword,
+  getExplorePhotos,
 };

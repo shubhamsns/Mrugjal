@@ -1,5 +1,5 @@
+import { Gallery } from 'components/gallery';
 import PropTypes from 'prop-types';
-import Gallery from '../gallery';
 
 function PhotoCollection({ photos, profileUsername, loggedInUsername }) {
   if (photos?.length === 0 && profileUsername === loggedInUsername) {

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 function Header({ user }) {
   return (
-    <div className="flex border-b h-4 p-4 py-8 border-gray-200">
+    <div className="flex border-b h-4 p-4 py-6 border-gray-200">
       <Link
         to={`/u/${user.username}`}
         className="flex items-center hover:underline"

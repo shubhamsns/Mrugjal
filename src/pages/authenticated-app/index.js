@@ -5,6 +5,7 @@ import { Header } from 'components/header';
 import { NotFound } from 'pages/404';
 import { Dashboard } from './dashboard';
 import { Profile } from './profile';
+import { Explore } from './explore';
 
 function AuthenticatedRoutes() {
   return (
@@ -17,6 +18,10 @@ function AuthenticatedRoutes() {
 
       <Route path="/p/:imageId">
         <h1>image here</h1>
+      </Route>
+
+      <Route path="/explore">
+        <Explore />
       </Route>
 
       <Route path="/not-found">

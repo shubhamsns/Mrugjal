@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import useDisclosure from '../hooks/use-disclosure';
 import { CloudinaryImage } from './cloudinary-image';
 
-export default function Gallery({ photos, withSvg, loggedInUser }) {
+function Gallery({ photos, withSvg, loggedInUser }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const isUser = !!loggedInUser;
@@ -158,3 +158,5 @@ Gallery.propTypes = {
   photos: PropTypes.arrayOf(PropTypes.object),
   withSvg: PropTypes.bool,
 };
+
+export { Gallery };

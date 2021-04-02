@@ -7,6 +7,7 @@ import {
   updateUserFollowingField,
 } from 'services/firebase';
 import useDisclosure from 'hooks/use-disclosure';
+
 import { CloudinaryImage } from 'components/cloudinary-image';
 import { Modal } from 'components/modal';
 
