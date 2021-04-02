@@ -6,6 +6,7 @@ import { useQueryClient } from 'react-query';
 import { useState } from 'react';
 import { AddPost } from './post/add-post';
 import { CloudinaryImage } from './cloudinary-image';
+import { Modal } from './modal';
 
 function Header() {
   const history = useHistory();
@@ -14,6 +15,8 @@ function Header() {
   const queryClient = useQueryClient();
 
   const [postModalStatus, setPostModalStatus] = useState(false);
+
+  const [logoutModalStatus, setLogoutModalStatus] = useState(false);
 
   const handleLogout = () => {
     firebaseApp.auth().signOut();
@@ -62,6 +65,7 @@ function Header() {
                 />
               </svg>
             </button>
+
             <AddPost
               userData={user}
               displayModal={postModalStatus}
@@ -85,12 +89,38 @@ function Header() {
               </svg>
             </Link>
 
+            {/* logout */}
+
+            <Modal
+              showHeader
+              isOpen={logoutModalStatus}
+              onClose={() => setLogoutModalStatus(false)}
+              title="Are you sure you?"
+            >
+              <div className="flex justify-around p-4">
+                <button
+                  type="button"
+                  onClick={() => setLogoutModalStatus(false)}
+                  className="font-bold text-gray-base text-xl cursor-default mr-4"
+                >
+                  No
+                </button>
+                <button
+                  type="button"
+                  className="font-bold text-blue-medium text-xl cursor-default mr-2"
+                  onClick={handleLogout}
+                >
+                  Yes
+                </button>
+              </div>
+            </Modal>
+
             <button
               type="button"
               title="Sign Out"
-              onClick={handleLogout}
+              onClick={() => setLogoutModalStatus(true)}
               onKeyDown={(e) => {
-                if (e.key === 'Enter') handleLogout();
+                if (e.key === 'Enter') setLogoutModalStatus(true);
               }}
             >
               <svg

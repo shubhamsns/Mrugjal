@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { v4 as uuid } from 'uuid';
@@ -6,11 +7,11 @@ import { useHistory } from 'react-router-dom';
 import { CloudinaryImage } from 'components/cloudinary-image';
 import { uploadUnsignedImage } from 'services/cloudinary';
 import { createPost } from 'services/firebase';
+import { useMutation } from 'react-query';
 
 function AddPost({ userData, displayModal, setDisplayStatus }) {
   const history = useHistory();
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadedImage, setUploadedImage] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
   const [postMessage, setPostMessage] = useState('');
@@ -37,41 +38,36 @@ function AddPost({ userData, displayModal, setDisplayStatus }) {
     setDisplayStatus((prev) => !prev);
   }
 
-  async function handleNewPostSubmit(event) {
-    event.preventDefault();
-    setIsSubmitting(true);
+  const uploadPostDataMutation = useMutation((data) => createPost(data), {
+    onSuccess: () => handleModalClose(),
+  });
 
-    const cloudinaryResponse = await uploadUnsignedImage(
-      uploadedImage,
-      userData.displayName,
-      'post',
-    );
+  const uploadImageMutation = useMutation(
+    () => uploadUnsignedImage(uploadedImage, userData.displayName, 'post'),
+    {
+      onSuccess: ({ public_id, secure_url }) => {
+        const postId = uuid();
+        uploadPostDataMutation.mutate({
+          caption: postMessage,
+          comments: [],
+          dateCreated: Date.now(),
+          imageSrc: public_id,
+          sourceURL: secure_url,
+          likes: [],
+          saved: [],
+          photoId: postId,
+          userId: userData.userId,
+        });
+      },
+    },
+  );
 
-    const postId = uuid();
+  const isUploadingImage =
+    uploadImageMutation.isLoading || uploadPostDataMutation.isLoading;
 
-    const postDataObject = {
-      caption: postMessage,
-      comments: [],
-      dateCreated: Date.now(),
-      imageSrc: cloudinaryResponse.public_id,
-      sourceURL: cloudinaryResponse.secure_url,
-      likes: [],
-      saved: [],
-      photoId: postId,
-      userId: userData.userId,
-    };
-
-    try {
-      await createPost(postDataObject);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setIsSubmitting(false);
-      handleModalClose();
-    }
-
-    // history.push(`/p/${postId}`);
-  }
+  const handleNewPostSubmit = () => {
+    uploadImageMutation.mutate();
+  };
 
   return (
     <div
@@ -190,15 +186,17 @@ function AddPost({ userData, displayModal, setDisplayStatus }) {
               <button
                 type="submit"
                 className={`font-bold text-blue-medium ${
-                  (postMessage.length < 1 || isSubmitting || !uploadedImage) &&
+                  (postMessage.length < 1 ||
+                    !isUploadingImage ||
+                    !uploadedImage) &&
                   'opacity-25 cursor-default'
                 } mr-1`}
                 disabled={
-                  postMessage.length < 1 || isSubmitting || !uploadedImage
+                  postMessage.length < 1 || !isUploadingImage || !uploadedImage
                 }
                 onClick={handleNewPostSubmit}
               >
-                {isSubmitting ? 'Uploading post...' : 'Post'}
+                {isUploadingImage ? 'Uploading Post' : 'Post'}
               </button>
             </div>
           </form>
