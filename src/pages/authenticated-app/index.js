@@ -12,7 +12,9 @@ import { PostPage } from './post';
 function AuthenticatedRoutes() {
   return (
     <Switch>
-      <Route path="/dashboard" component={Dashboard} />
+      <Route path="/dashboard">
+        <Dashboard />
+      </Route>
 
       <Route path="/u/:username">
         <Profile />

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useMutation, useQueryClient } from 'react-query';
 import Skeleton from 'react-loading-skeleton';
 
 import {
@@ -7,12 +8,11 @@ import {
   updateUserFollowingField,
 } from 'services/firebase';
 import useDisclosure from 'hooks/use-disclosure';
+import { useFirestoreUser } from 'hooks/use-firestore-user';
+import { uploadUnsignedImage } from 'services/cloudinary';
 
 import { CloudinaryImage } from 'components/cloudinary-image';
 import { Modal } from 'components/modal';
-import { useMutation, useQueryClient } from 'react-query';
-import { uploadUnsignedImage } from 'services/cloudinary';
-import { useFirestoreUser } from 'hooks/use-firestore-user';
 
 function Details({ profileData, postCount, userData }) {
   const queryClient = useQueryClient();
@@ -25,12 +25,12 @@ function Details({ profileData, postCount, userData }) {
     onOpen: onChangeAvatarOpen,
   } = useDisclosure();
 
-  // follow unfollow
+  //* follow unfollow
   const [showFollowButton, setShowFollowButton] = useState(null);
   const [isFollowingProfile, setIsFollowingProfile] = useState(false);
   const [followerCount, setFollowerCount] = useState(0);
 
-  // image
+  //* image
   const inputRef = useRef();
   const [uploadedImage, setUploadedImage] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);

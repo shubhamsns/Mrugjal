@@ -42,7 +42,7 @@ function Header() {
           <img
             src="/images/mrugjal-light.png"
             alt="Instagram"
-            className="w-32"
+            className="w-36 h-full"
           />
         </Link>
 

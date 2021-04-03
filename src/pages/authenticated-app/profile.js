@@ -27,7 +27,6 @@ function Profile() {
       <div className="container mx-auto max-w-screen-lg px-3">
         <UserProfile profile={user} />
       </div>
-      {/* <BottomNavigation /> */}
     </div>
   );
 }

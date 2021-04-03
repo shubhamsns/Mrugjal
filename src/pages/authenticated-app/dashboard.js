@@ -9,7 +9,7 @@ function Dashboard() {
   }, []);
 
   return (
-    <div className="grid grid-cols-3 gap-4 justify-between mx-auto max-w-screen-lg">
+    <div className="container flex justify-center lg:grid lg:grid-cols-3 lg:gap-4 lg:justify-between mx-auto max-w-screen-lg px-3">
       <Timeline />
       <Sidebar />
     </div>

@@ -53,13 +53,16 @@ function Modal({
               />
             </svg>
           </button>
+
           {title && (
             <span className="flex-grow text-center font-semibold text-lg transform -translate-x-4">
               {title}
             </span>
           )}
         </div>
+
         {children}
+
         {!showHeader && (
           <button
             type="button"

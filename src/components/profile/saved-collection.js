@@ -6,12 +6,12 @@ import { getSavedPosts } from 'services/firebase';
 
 function SavedCollection({ userSavedPosts }) {
   const { isLoading, data: savedPhotos } = useQuery({
-    queryKey: ['user-saved-post', userSavedPosts],
+    queryKey: ['saved', userSavedPosts],
     queryFn: () => getSavedPosts(userSavedPosts),
     enabled: userSavedPosts?.length > 0,
   });
 
-  if (userSavedPosts.length === 0) {
+  if (savedPhotos?.length === 0) {
     return (
       <div className="flex flex-col items-center">
         <p className="text-gray-base text-xs text-center">

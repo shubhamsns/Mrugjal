@@ -10,10 +10,13 @@ function Sidebar() {
   } = useFirestoreUser();
 
   return (
-    <div className="p-4">
+    <aside
+      className="hidden lg:block p-4 pt-0 sticky top-24 h-fit"
+      aria-label="Profile information"
+    >
       <User username={username} userInfo={userInfo} userAvatar={photoURL} />
       <Suggestions userId={userId} userFollowing={following} />
-    </div>
+    </aside>
   );
 }
 
