@@ -418,6 +418,16 @@ async function getPostWithMetaByPostId(postId, loggedInUserId = null) {
   return { post, user, userLikedPhoto, userSavedPhoto };
 }
 
+/**
+ * Function used to delete a post by it's document id
+ *
+ * @param {string} postDocId Document id of the post that is to be deleted
+ * @return {Promise<void>} A promise of type void.
+ */
+async function deletePostByDocId(postDocId) {
+  return database.collection('photos').doc(postDocId).delete();
+}
+
 export {
   doesUserExist,
   createFirestoreUser,
@@ -438,4 +448,5 @@ export {
   getExplorePhotos,
   updateUserAvatar,
   getPostWithMetaByPostId,
+  deletePostByDocId,
 };

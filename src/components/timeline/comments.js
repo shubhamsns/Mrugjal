@@ -1,6 +1,6 @@
-import { formatDistance } from 'date-fns';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { formatDistance } from 'date-fns';
 import PropTypes from 'prop-types';
 
 import { AddComment } from 'components/post/add-comment';

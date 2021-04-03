@@ -3,6 +3,7 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 
 import { Header } from 'components/header';
 import { NotFound } from 'pages/404';
+import { BottomNav } from 'components/bottom-nav';
 import { Dashboard } from './dashboard';
 import { Profile } from './profile';
 import { Explore } from './explore';
@@ -39,6 +40,7 @@ function AuthenticatedApp() {
     <div className="bg-gray-background">
       <Header />
       <AuthenticatedRoutes />
+      <BottomNav />
     </div>
   );
 }

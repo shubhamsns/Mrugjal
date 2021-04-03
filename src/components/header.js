@@ -101,7 +101,7 @@ function Header() {
             to="/explore"
             title="Explore"
             aria-label="Explore page"
-            className="sm:mr-3.5 mr-2"
+            className="mr-3.5 hidden sm:block"
           >
             <svg
               className="w-7 text-black-light cursor-pointer active:text-gray-500"
@@ -125,7 +125,7 @@ function Header() {
             button={
               <button
                 type="button"
-                className="rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-gray-600"
+                className="rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-gray-600 hidden sm:block"
                 id="options-menu"
                 aria-expanded={!!isOpen}
                 aria-haspopup="true"

@@ -1,6 +1,7 @@
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Image } from 'cloudinary-react';
+import PropTypes from 'prop-types';
+
 import { Actions } from 'components/post/actions';
 import { Footer } from './footer';
 import { Comments } from './comments';

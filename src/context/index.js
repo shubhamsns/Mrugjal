@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import {
   MutationCache,
@@ -49,7 +48,7 @@ function AppProviders({ children }) {
           <AuthProvider>{children}</AuthProvider>
         </FirebaseProvider>
       </Router>
-      <ReactQueryDevtools position="bottom-right" />
+      <ReactQueryDevtools position="bottom-left" />
     </QueryClientProvider>
   );
 }
