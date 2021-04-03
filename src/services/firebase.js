@@ -375,7 +375,7 @@ async function getExplorePhotos(userId, limitQuery = 21) {
  * Function used to update the avatar of user
  *
  * @param {string} docId docId of that user
- * @param {string} updatedAvatarLink new cloudinary link
+ * @param {string } updatedAvatarLink new cloudinary link
  */
 async function updateUserAvatar(docId, updatedAvatarLink) {
   await database.collection('users').doc(docId).update({

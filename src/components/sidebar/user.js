@@ -1,23 +1,25 @@
-import { memo } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import Skeleton from 'react-loading-skeleton';
+import { CloudinaryImage } from 'components/cloudinary-image';
 
-function User({ username, userInfo, userAvatar }) {
-  if (!username || !userInfo) return <Skeleton count={1} height={61} />;
+function User({ userData, isLoading }) {
+  if (isLoading) return <Skeleton count={1} height={61} />;
 
   return (
     <Link
-      to={`/u/${username}`}
+      to={`/u/${userData.username}`}
       className="grid grid-cols-4 gap-4 mb-6 items-center"
     >
       <div className="flex items-center justify-between col-span-1">
-        {userAvatar ? (
-          <img
-            className="rounded-full w-16 flex mr-3"
-            src={userAvatar}
-            alt="user avatar"
+        {userData.photoURL ? (
+          <CloudinaryImage
+            src={userData.photoURL}
+            alt={`${userData.username} profile`}
+            size="65"
+            type="profile"
+            className="rounded-full h-16 w-16 flex min-w-max"
           />
         ) : (
           <svg
@@ -37,17 +39,30 @@ function User({ username, userInfo, userAvatar }) {
         )}
       </div>
       <div className="col-span-3">
-        <p className="font-bold test-sm">{username}</p>
-        <p className=" test-sm">{userInfo.fullName}</p>
+        <p className="font-semibold tracking-wide text-lg">
+          {userData.username}
+        </p>
+        <p className=" test-sm">{userData.userInfo.fullName}</p>
       </div>
     </Link>
   );
 }
-const MemoUser = memo(User);
 
-User.propTypes = {
-  username: PropTypes.string,
-  fullName: PropTypes.string,
+User.defaultProps = {
+  userData: null,
 };
 
-export { MemoUser };
+User.propTypes = {
+  userData: PropTypes.exact({
+    username: PropTypes.string,
+    userInfo: PropTypes.shape({
+      bio: PropTypes.string.isRequired,
+      fullName: PropTypes.string.isRequired,
+      website: PropTypes.string.isRequired,
+    }),
+    photoURL: PropTypes.string,
+    verifiedUser: PropTypes.bool,
+  }),
+};
+
+export { User };

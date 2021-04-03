@@ -2,15 +2,10 @@ import PropTypes from 'prop-types';
 import Skeleton from 'react-loading-skeleton';
 import { Link } from 'react-router-dom';
 
-import useDisclosure from '../hooks/use-disclosure';
 import { CloudinaryImage } from './cloudinary-image';
 
-function Gallery({ photos, withSvg, loggedInUser }) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const isUser = !!loggedInUser;
-
-  if (!photos) {
+function Gallery({ photos, withSvg, isLoading }) {
+  if (isLoading) {
     return (
       <>
         {Array(12)
@@ -55,86 +50,41 @@ function Gallery({ photos, withSvg, loggedInUser }) {
             </svg>
           )}
 
-          {isUser ? (
-            <Link to={`/p/${photo.photoId}`}>
-              <div className="absolute bottom-0 left-0 z-10 w-full justify-center items-center h-full bg-black-faded group-hover:flex hidden cursor-pointer">
-                <p className="flex items-center text-white font-bold mr-10">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    className="w-8 mr-2"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  {photo.likes.length}
-                </p>
+          <Link to={`/p/${photo.photoId}`}>
+            <div className="absolute bottom-0 left-0 z-10 w-full justify-center items-center h-full bg-black-faded group-hover:flex hidden cursor-pointer">
+              <p className="flex items-center text-white font-bold mr-10">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="w-8 mr-2"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                {photo.likes.length}
+              </p>
 
-                <p className="flex items-center text-white font-bold">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    className="w-8 mr-2"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  {photo.comments.length}
-                </p>
-              </div>
-            </Link>
-          ) : (
-            <button
-              type="button"
-              aria-label="Go to post page"
-              onClick={onOpen}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter') onOpen();
-              }}
-            >
-              <div className="absolute bottom-0 left-0 z-10 w-full justify-center items-center h-full bg-black-faded group-hover:flex hidden cursor-pointer">
-                <p className="flex items-center text-white font-bold mr-10">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    className="w-8 mr-2"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  {photo.likes.length}
-                </p>
-
-                <p className="flex items-center text-white font-bold">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    className="w-8 mr-2"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  {photo.comments.length}
-                </p>
-              </div>
-            </button>
-          )}
+              <p className="flex items-center text-white font-bold">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="w-8 mr-2"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                {photo.comments.length}
+              </p>
+            </div>
+          </Link>
         </li>
       ))}
 
@@ -146,15 +96,9 @@ function Gallery({ photos, withSvg, loggedInUser }) {
 Gallery.defaultProps = {
   photos: null,
   withSvg: false,
-  loggedInUser: false,
 };
 
 Gallery.propTypes = {
-  loggedInUser: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.string,
-    PropTypes.bool,
-  ]),
   photos: PropTypes.arrayOf(PropTypes.object),
   withSvg: PropTypes.bool,
 };

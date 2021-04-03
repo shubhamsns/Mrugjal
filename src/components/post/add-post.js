@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 import { useMutation } from 'react-query';
-import PropTypes from 'prop-types';
 
 import { CloudinaryImage } from 'components/cloudinary-image';
 import { uploadUnsignedImage } from 'services/cloudinary';
@@ -39,11 +38,15 @@ function AddPost({ userData, displayModal, setDisplayStatus }) {
   }
 
   const uploadPostDataMutation = useMutation((data) => createPost(data), {
-    onSuccess: () => handleModalClose(),
+    onSuccess: (_, variables) => {
+      handleModalClose();
+      console.log(variables, _);
+      history.push(`/p/${variables.photoId}`);
+    },
   });
 
   const uploadImageMutation = useMutation(
-    () => uploadUnsignedImage(uploadedImage, userData.displayName, 'post'),
+    () => uploadUnsignedImage(uploadedImage, userData.username, 'post'),
     {
       onSuccess: ({ public_id, secure_url }) => {
         const postId = uuid();
@@ -64,6 +67,9 @@ function AddPost({ userData, displayModal, setDisplayStatus }) {
 
   const isUploadingImage =
     uploadImageMutation.isLoading || uploadPostDataMutation.isLoading;
+
+  const isDisabled =
+    postMessage.length < 1 || isUploadingImage || !previewImage;
 
   const handleNewPostSubmit = () => {
     uploadImageMutation.mutate();
@@ -179,21 +185,16 @@ function AddPost({ userData, displayModal, setDisplayStatus }) {
                   accept="image/jpeg,image/png"
                   type="file"
                   className="sr-only"
-                  onChange={handleImageUpload}
+                  onInput={handleImageUpload}
                 />
               </label>
 
               <button
                 type="submit"
                 className={`font-bold text-blue-medium ${
-                  (postMessage.length < 1 ||
-                    !isUploadingImage ||
-                    !uploadedImage) &&
-                  'opacity-25 cursor-default'
+                  isDisabled && 'opacity-25 cursor-default'
                 } mr-1`}
-                disabled={
-                  postMessage.length < 1 || !isUploadingImage || !uploadedImage
-                }
+                disabled={isDisabled}
                 onClick={handleNewPostSubmit}
               >
                 {isUploadingImage ? 'Uploading Post' : 'Post'}
@@ -205,11 +206,5 @@ function AddPost({ userData, displayModal, setDisplayStatus }) {
     </div>
   );
 }
-
-AddPost.propTypes = {
-  userData: PropTypes.objectOf(PropTypes.any).isRequired,
-  displayModal: PropTypes.bool.isRequired,
-  setDisplayStatus: PropTypes.func.isRequired,
-};
 
 export { AddPost };

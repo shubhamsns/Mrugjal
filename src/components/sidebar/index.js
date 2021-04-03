@@ -1,12 +1,12 @@
-import React from 'react';
-
 import { useFirestoreUser } from 'hooks/use-firestore-user';
+
 import { Suggestions } from './suggestions';
-import { MemoUser as User } from './user';
+import { User } from './user';
 
 function Sidebar() {
   const {
-    user: { userInfo, username, userId, following, photoURL },
+    user: { userInfo, username, userId, following, photoURL, verifiedUser },
+    isLoading,
   } = useFirestoreUser();
 
   return (
@@ -14,7 +14,10 @@ function Sidebar() {
       className="hidden lg:block p-4 pt-0 sticky top-24 h-fit"
       aria-label="Profile information"
     >
-      <User username={username} userInfo={userInfo} userAvatar={photoURL} />
+      <User
+        userData={{ username, userInfo, photoURL, verifiedUser }}
+        isLoading={isLoading}
+      />
       <Suggestions userId={userId} userFollowing={following} />
     </aside>
   );

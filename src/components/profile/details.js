@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
+import { useParams } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
 
 import {
@@ -16,6 +17,8 @@ import { Modal } from 'components/modal';
 
 function Details({ profileData, postCount, userData }) {
   const queryClient = useQueryClient();
+  const { username } = useParams();
+
   const { user } = useFirestoreUser();
 
   const { isOpen, onClose, onOpen } = useDisclosure();
@@ -36,24 +39,27 @@ function Details({ profileData, postCount, userData }) {
   const [previewImage, setPreviewImage] = useState(null);
 
   //* update firestore database
-  const { mutate: updateAvatarMutate } = useMutation(
-    (avatarSrc) => updateUserAvatar(user.docId, avatarSrc),
-    {
-      onSuccess() {
-        setUploadedImage('');
-        setPreviewImage('');
-        queryClient.invalidateQueries('profile');
-        queryClient.invalidateQueries(['user', 'firestore']);
-      },
-
-      onSettled() {
-        onChangeAvatarClose();
-      },
+  const {
+    mutate: updateAvatarMutate,
+    isLoading: isUpdatingDatabase,
+  } = useMutation((avatarSrc) => updateUserAvatar(user.docId, avatarSrc), {
+    onSuccess() {
+      setUploadedImage('');
+      setPreviewImage('');
+      queryClient.invalidateQueries('profile');
+      queryClient.invalidateQueries(['user', 'firestore']);
     },
-  );
+
+    onSettled() {
+      onChangeAvatarClose();
+    },
+  });
 
   //* avatar upload
-  const { mutate: uploadImageMutate } = useMutation(
+  const {
+    mutate: uploadImageMutate,
+    isLoading: isAvatarUploading,
+  } = useMutation(
     () => uploadUnsignedImage(uploadedImage, user.username, 'avatar'),
     {
       // eslint-disable-next-line camelcase
@@ -62,6 +68,10 @@ function Details({ profileData, postCount, userData }) {
       },
     },
   );
+
+  const isLoading = isAvatarUploading || isUpdatingDatabase;
+
+  const isCurrentUser = username === user.username;
 
   async function handleToggleFollowUser() {
     setIsFollowingProfile((prevFollowingState) => !prevFollowingState);
@@ -112,11 +122,9 @@ function Details({ profileData, postCount, userData }) {
   return (
     <div className="grid sm:grid-cols-3 grid-cols-4 gap-4 justify-between mx-auto max-w-screen-lg">
       <div className="container flex justify-center col-span-2 sm:col-auto">
-        <div
-          onKeyPress={onChangeAvatarOpen}
-          role="button"
-          tabIndex={0}
-          onClick={onChangeAvatarOpen}
+        <button
+          type="button"
+          onClick={() => (isCurrentUser ? onChangeAvatarOpen : null)}
         >
           {profileData.photoURL ? (
             <div className="w-32 h-32 sm:h-40 sm:w-40 min-w-max mr-3">
@@ -144,7 +152,7 @@ function Details({ profileData, postCount, userData }) {
               />
             </svg>
           )}
-        </div>
+        </button>
       </div>
 
       <div className="flex items-center justify-center flex-col col-span-2">
@@ -271,8 +279,9 @@ function Details({ profileData, postCount, userData }) {
                       aria-label="Upload Photo"
                       className="text-blue-medium text-center border-t border-b border-gray-primary cursor-pointer w-full py-2.5 px-2 font-bold text-sm"
                       onClick={() => uploadImageMutate()}
+                      disabled={isLoading}
                     >
-                      Confirm
+                      {isLoading ? 'Updating' : 'Confirm'}
                     </button>
                   ) : (
                     <>

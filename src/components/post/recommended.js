@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Skeleton from 'react-loading-skeleton';
@@ -7,27 +6,18 @@ import Skeleton from 'react-loading-skeleton';
 import { useAuth } from 'context/auth.context';
 import { getUserPhotosByUserId } from 'services/firebase';
 import { Gallery } from 'components/gallery';
+import { useQuery } from 'react-query';
 
 function Recommended({ userId, username, postId }) {
   const user = useAuth();
 
-  const [recommendedPostState, setRecommended] = useState(null);
+  const { data: recommendedPosts, isLoading } = useQuery({
+    queryKey: 'recommended',
+    queryFn: () => getUserPhotosByUserId(userId, 6),
+    select: (posts) => posts.filter((p) => p.photoId !== postId),
+  });
 
-  useEffect(() => {
-    async function getRecommendations() {
-      const posts = await getUserPhotosByUserId(userId, 6);
-
-      if (posts) {
-        const recommended = posts.filter((p) => p.photoId !== postId);
-
-        setRecommended(recommended);
-      }
-    }
-
-    getRecommendations();
-  }, [postId]);
-
-  if (!recommendedPostState) {
+  if (isLoading) {
     return (
       <div className="grid grid-cols-3 gap-8 mt-4 pb-12">
         {Array(12)
@@ -51,12 +41,17 @@ function Recommended({ userId, username, postId }) {
           {username}
         </Link>
       </div>
-      {recommendedPostState.length > 0 ? (
+
+      {recommendedPosts.length > 0 ? (
         <div className="flex flex-col sm:grid sm:grid-cols-2 md:grid-cols-3 md:gap-6 sm:gap-4 mt-4 pb-12">
-          <Gallery photos={recommendedPostState} loggedInUser={user} />
+          <Gallery
+            photos={recommendedPosts}
+            loggedInUser={user}
+            isLoading={isLoading}
+          />
         </div>
       ) : (
-        <div className="flex flex-col mt-12 items-center">
+        <div className="flex flex-col my-12 items-center">
           <svg
             className="w-16 text-black-light border-2 border-black-light rounded-full p-3 mt-3"
             xmlns="http://www.w3.org/2000/svg"
@@ -77,6 +72,7 @@ function Recommended({ userId, username, postId }) {
               d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
             />
           </svg>
+
           <p className="text-black-light mt-7 font-light text-3xl">
             No More Posts
           </p>

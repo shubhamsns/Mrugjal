@@ -11,7 +11,7 @@ function SavedCollection({ userSavedPosts }) {
     enabled: userSavedPosts?.length > 0,
   });
 
-  if (savedPhotos?.length === 0) {
+  if (!savedPhotos && !isLoading) {
     return (
       <div className="flex flex-col items-center">
         <p className="text-gray-base text-xs text-center">
@@ -44,7 +44,7 @@ function SavedCollection({ userSavedPosts }) {
 
   return (
     <ul className="grid grid-cols-3 gap-8 mt-4 pb-12">
-      <Gallery photos={savedPhotos} loggedInUser />
+      <Gallery photos={savedPhotos} isLoading={isLoading} />
     </ul>
   );
 }
