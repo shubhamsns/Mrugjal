@@ -39,7 +39,11 @@ function Header() {
           title="instagram branding"
           to="/dashboard"
         >
-          <img src="/images/logo.png" alt="Instagram" className="w-28" />
+          <img
+            src="/images/mrugjal-light.png"
+            alt="Instagram"
+            className="w-32"
+          />
         </Link>
 
         <SearchBar className="hidden sm:block" />
