@@ -201,6 +201,32 @@ function Header() {
                 </Link>
               </div>
 
+              <div className="py-0.5" role="none" onClick={onClose}>
+                <Link
+                  to={`/u/${user.username}/saved`}
+                  title="User profile"
+                  aria-label="User profile"
+                  className="flex px-3 py-2 text-sm text-black-light hover:bg-gray-50 hover:text-gray-900"
+                  role="menuitem"
+                >
+                  <svg
+                    className="w-5 mr-2.5"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+                    />
+                  </svg>
+                  <span>Saved</span>
+                </Link>
+              </div>
+
               <div className="py-0.5" role="none">
                 <button
                   type="button"
@@ -232,13 +258,13 @@ function Header() {
           <button
             type="button"
             onClick={() => setLogoutModalStatus(false)}
-            className="font-bold text-gray-base text-xl cursor-default mr-4"
+            className=" font-bold text-gray-base text-xl mr-4"
           >
             No
           </button>
           <button
             type="button"
-            className="font-bold text-blue-medium text-xl cursor-default mr-2"
+            className="font-bold text-blue-medium text-xl mr-2"
             onClick={handleLogout}
           >
             Yes

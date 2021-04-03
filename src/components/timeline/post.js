@@ -2,15 +2,14 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Image } from 'cloudinary-react';
 import { Actions } from 'components/post/actions';
-import { Header } from './header';
 import { Footer } from './footer';
 import { Comments } from './comments';
+import { Header } from './header';
 
 function Post({ postData }) {
   return (
     <div className="rounded col-span-4 bg-white border border-gray-primary mb-12">
       <Header user={postData.user} />
-
       <Link to={`/p/${postData.photoId}`}>
         <Image
           cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}

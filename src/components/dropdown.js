@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 function Dropdown({ isOpen, onClose, children, button, maxW }) {
   return (
     <div
-      className="relative text-left flex"
-      tabIndex={-1}
+      className="relative text-left flex z-20"
       onBlur={(event) => {
         if (!event.currentTarget.contains(event.relatedTarget)) {
           onClose();

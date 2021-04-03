@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
+import { useEffect, useRef, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
 import {
+  updateUserAvatar,
   updateUserFollowersField,
   updateUserFollowingField,
 } from 'services/firebase';
@@ -10,13 +10,58 @@ import useDisclosure from 'hooks/use-disclosure';
 
 import { CloudinaryImage } from 'components/cloudinary-image';
 import { Modal } from 'components/modal';
+import { useMutation, useQueryClient } from 'react-query';
+import { uploadUnsignedImage } from 'services/cloudinary';
+import { useFirestoreUser } from 'hooks/use-firestore-user';
 
 function Details({ profileData, postCount, userData }) {
-  const { isOpen, onClose, onOpen } = useDisclosure();
+  const queryClient = useQueryClient();
+  const { user } = useFirestoreUser();
 
+  const { isOpen, onClose, onOpen } = useDisclosure();
+  const {
+    isOpen: isChangeAvatarOpen,
+    onClose: onChangeAvatarClose,
+    onOpen: onChangeAvatarOpen,
+  } = useDisclosure();
+
+  // follow unfollow
   const [showFollowButton, setShowFollowButton] = useState(null);
   const [isFollowingProfile, setIsFollowingProfile] = useState(false);
   const [followerCount, setFollowerCount] = useState(0);
+
+  // image
+  const inputRef = useRef();
+  const [uploadedImage, setUploadedImage] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
+
+  //* update firestore database
+  const { mutate: updateAvatarMutate } = useMutation(
+    (avatarSrc) => updateUserAvatar(user.docId, avatarSrc),
+    {
+      onSuccess() {
+        setUploadedImage('');
+        setPreviewImage('');
+        queryClient.invalidateQueries('profile');
+        queryClient.invalidateQueries(['user', 'firestore']);
+      },
+
+      onSettled() {
+        onChangeAvatarClose();
+      },
+    },
+  );
+
+  //* avatar upload
+  const { mutate: uploadImageMutate } = useMutation(
+    () => uploadUnsignedImage(uploadedImage, user.username, 'avatar'),
+    {
+      // eslint-disable-next-line camelcase
+      onSuccess({ public_id }) {
+        updateAvatarMutate(public_id);
+      },
+    },
+  );
 
   async function handleToggleFollowUser() {
     setIsFollowingProfile((prevFollowingState) => !prevFollowingState);
@@ -49,35 +94,57 @@ function Details({ profileData, postCount, userData }) {
     }
   }, [userData, profileData]);
 
+  function handleImageUpload(event) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    setUploadedImage(file);
+
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      // https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readyState
+      if (reader.readyState === 2) {
+        setPreviewImage(reader.result);
+      }
+    };
+  }
+
   return (
     <div className="grid sm:grid-cols-3 grid-cols-4 gap-4 justify-between mx-auto max-w-screen-lg">
       <div className="container flex justify-center col-span-2 sm:col-auto">
-        {profileData.photoURL ? (
-          <div className="w-32 h-32 sm:h-40 sm:w-40 min-w-max mr-3">
-            <CloudinaryImage
-              src={profileData.photoURL}
-              alt={`${profileData.username} profile`}
-              size="165"
-              type="profile"
-              className="rounded-full"
-            />
-          </div>
-        ) : (
-          <svg
-            className="w-32 mr-6 text-black-light cursor-pointer"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-        )}
+        <div
+          onKeyPress={onChangeAvatarOpen}
+          role="button"
+          tabIndex={0}
+          onClick={onChangeAvatarOpen}
+        >
+          {profileData.photoURL ? (
+            <div className="w-32 h-32 sm:h-40 sm:w-40 min-w-max mr-3">
+              <CloudinaryImage
+                src={profileData.photoURL}
+                alt={`${profileData.username} profile`}
+                size="165"
+                type="profile"
+                className="rounded-full"
+              />
+            </div>
+          ) : (
+            <svg
+              className="w-32 mr-6 text-black-light cursor-pointer"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          )}
+        </div>
       </div>
 
       <div className="flex items-center justify-center flex-col col-span-2">
@@ -153,6 +220,85 @@ function Details({ profileData, postCount, userData }) {
                   Follow
                 </button>
               )}
+
+              {/*  change avatar modal */}
+              <Modal
+                isOpen={isChangeAvatarOpen}
+                onClose={() => {
+                  onChangeAvatarClose();
+                  setPreviewImage(null);
+                  setUploadedImage(null);
+                }}
+                maxW="sm"
+                showHeader={false}
+                className="rounded-xl"
+              >
+                <div className="flex flex-col items-center pt-5">
+                  {previewImage && (
+                    <div
+                      className="rounded-full"
+                      tabIndex={0}
+                      onClick={() => inputRef.current.click()}
+                      onKeyPress={() => inputRef.current.click()}
+                      role="button"
+                    >
+                      <img
+                        className="w-24 h-24 rounded-full mb-2 min-w-full max-h-80 object-contain bg-gray-100 shadow-md"
+                        aria-label="preview image"
+                        src={previewImage}
+                        alt="Uploaded preview"
+                      />
+                    </div>
+                  )}
+
+                  <input
+                    ref={inputRef}
+                    id="file-upload"
+                    name="file-upload"
+                    accept="image/jpeg,image/png"
+                    type="file"
+                    className="sr-only"
+                    onChange={handleImageUpload}
+                  />
+
+                  <p className="text-black-light text-xl font-semibold mb-6">
+                    Change Profile Photo
+                  </p>
+
+                  {previewImage ? (
+                    <button
+                      type="button"
+                      aria-label="Upload Photo"
+                      className="text-blue-medium text-center border-t border-b border-gray-primary cursor-pointer w-full py-2.5 px-2 font-bold text-sm"
+                      onClick={() => uploadImageMutate()}
+                    >
+                      Confirm
+                    </button>
+                  ) : (
+                    <>
+                      <button
+                        type="button"
+                        aria-label="Upload Photo"
+                        className="text-blue-medium text-center border-t border-b border-gray-primary cursor-pointer w-full py-2.5 px-2 font-bold text-sm"
+                        onClick={() => inputRef.current.click()}
+                      >
+                        Upload Photo
+                      </button>
+
+                      {profileData.photoURL && (
+                        <button
+                          type="button"
+                          aria-label="Remove Current Photo"
+                          className="text-red-primary border-b border-gray-primary w-full py-2.5 px-2 font-bold text-sm"
+                          onClick={() => updateAvatarMutate('')}
+                        >
+                          Remove Current Photo
+                        </button>
+                      )}
+                    </>
+                  )}
+                </div>
+              </Modal>
 
               <Modal
                 isOpen={isOpen}
@@ -266,43 +412,5 @@ function Details({ profileData, postCount, userData }) {
     </div>
   );
 }
-
-Details.defaultProps = {
-  userData: null,
-};
-
-Details.propTypes = {
-  profileData: PropTypes.shape({
-    dateCreated: PropTypes.number.isRequired,
-    docId: PropTypes.string.isRequired,
-    followers: PropTypes.arrayOf(PropTypes.string).isRequired,
-    following: PropTypes.arrayOf(PropTypes.string).isRequired,
-    userInfo: PropTypes.shape({
-      bio: PropTypes.string.isRequired,
-      fullName: PropTypes.string.isRequired,
-      website: PropTypes.string.isRequired,
-    }).isRequired,
-    photoURL: PropTypes.string.isRequired,
-    userId: PropTypes.string.isRequired,
-    username: PropTypes.string.isRequired,
-    verifiedUser: PropTypes.bool.isRequired,
-  }).isRequired,
-  postCount: PropTypes.number.isRequired,
-  userData: PropTypes.shape({
-    dateCreated: PropTypes.number,
-    docId: PropTypes.string,
-    followers: PropTypes.arrayOf(PropTypes.string),
-    following: PropTypes.arrayOf(PropTypes.string),
-    userInfo: PropTypes.shape({
-      bio: PropTypes.string,
-      fullName: PropTypes.string,
-      website: PropTypes.string,
-    }),
-    photoURL: PropTypes.string,
-    userId: PropTypes.string,
-    username: PropTypes.string,
-    verifiedUser: PropTypes.bool,
-  }),
-};
 
 export { Details };

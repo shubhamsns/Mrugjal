@@ -371,6 +371,53 @@ async function getExplorePhotos(userId, limitQuery = 21) {
   return photos;
 }
 
+/**
+ * Function used to update the avatar of user
+ *
+ * @param {string} docId docId of that user
+ * @param {string} updatedAvatarLink new cloudinary link
+ */
+async function updateUserAvatar(docId, updatedAvatarLink) {
+  await database.collection('users').doc(docId).update({
+    photoURL: updatedAvatarLink,
+  });
+}
+
+/**
+ * Function used to get a specific post by it's `postId`
+ *
+ * @param {string} postId The id of the post to be queried
+ * @param {string|null} [loggedInUserId=null] The user id of the current logged in user, defaults to `null`
+ *
+ * @return {Promise<{}>} A promise of type object.
+ */
+async function getPostWithMetaByPostId(postId, loggedInUserId = null) {
+  const { docs } = await database
+    .collection('photos')
+    .where('photoId', '==', postId)
+    .limit(1)
+    .get();
+
+  const [post] = docs.map((doc) => ({ ...doc.data(), docId: doc.id }));
+
+  const user = await getUserDataByUserId(post.userId);
+
+  let userLikedPhoto = false;
+  let userSavedPhoto = false;
+
+  if (loggedInUserId) {
+    if (post.likes.includes(loggedInUserId)) {
+      userLikedPhoto = true;
+    }
+
+    if (post.saved.includes(loggedInUserId)) {
+      userSavedPhoto = true;
+    }
+  }
+
+  return { post, user, userLikedPhoto, userSavedPhoto };
+}
+
 export {
   doesUserExist,
   createFirestoreUser,
@@ -389,4 +436,6 @@ export {
   getUserDataByUsername,
   getUserDataByKeyword,
   getExplorePhotos,
+  updateUserAvatar,
+  getPostWithMetaByPostId,
 };

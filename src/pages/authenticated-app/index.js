@@ -6,6 +6,7 @@ import { NotFound } from 'pages/404';
 import { Dashboard } from './dashboard';
 import { Profile } from './profile';
 import { Explore } from './explore';
+// import { PostPage } from './post';
 
 function AuthenticatedRoutes() {
   return (
@@ -16,9 +17,7 @@ function AuthenticatedRoutes() {
         <Profile />
       </Route>
 
-      <Route path="/p/:imageId">
-        <h1>image here</h1>
-      </Route>
+      <Route path="/p/:postId">{/* <PostPage /> */}</Route>
 
       <Route path="/explore">
         <Explore />

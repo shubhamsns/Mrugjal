@@ -1,12 +1,33 @@
 import * as React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import {
+  MutationCache,
+  QueryCache,
+  QueryClient,
+  QueryClientProvider,
+} from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 
 import { AuthProvider } from './auth.context';
 import { FirebaseProvider } from './firebase.context';
 
+const mutationCache = new MutationCache({
+  //  for consoling error, you replace console with toast for better ux
+  onError(error, variables, context, mutation) {
+    console.error(error);
+  },
+});
+
+const queryCache = new QueryCache({
+  //  for consoling error, you replace console with toast for better ux
+  onError(error, query) {
+    console.error(error);
+  },
+});
+
 const queryClient = new QueryClient({
+  mutationCache,
+  queryCache,
   defaultOptions: {
     queries: {
       useErrorBoundary: true,

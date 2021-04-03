@@ -20,7 +20,7 @@ function Header({ user }) {
           />
         ) : (
           <svg
-            className="w-8 text-black-light cursor-pointer"
+            className="w-8 mr-2 text-black-light cursor-pointer"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"

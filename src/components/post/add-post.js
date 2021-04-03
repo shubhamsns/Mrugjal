@@ -1,13 +1,13 @@
 /* eslint-disable camelcase */
 import { useState } from 'react';
-import PropTypes from 'prop-types';
-import { v4 as uuid } from 'uuid';
 import { useHistory } from 'react-router-dom';
+import { v4 as uuid } from 'uuid';
+import { useMutation } from 'react-query';
+import PropTypes from 'prop-types';
 
 import { CloudinaryImage } from 'components/cloudinary-image';
 import { uploadUnsignedImage } from 'services/cloudinary';
 import { createPost } from 'services/firebase';
-import { useMutation } from 'react-query';
 
 function AddPost({ userData, displayModal, setDisplayStatus }) {
   const history = useHistory();
@@ -73,7 +73,7 @@ function AddPost({ userData, displayModal, setDisplayStatus }) {
     <div
       className={`${
         displayModal ? 'absolute' : 'hidden'
-      } flex justify-center items-center inset-0 ${previewImage ? '' : ''}`}
+      } flex justify-center items-center inset-0`}
     >
       <div
         aria-hidden
