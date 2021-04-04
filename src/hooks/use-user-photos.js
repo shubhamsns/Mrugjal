@@ -6,6 +6,7 @@ import { useFirestoreUser } from './use-firestore-user';
 function useUserPhotos() {
   const {
     user: { following, userId },
+    isLoading,
   } = useFirestoreUser();
 
   const query = useQuery({
@@ -24,7 +25,7 @@ function useUserPhotos() {
     enabled: Boolean(following?.length),
   });
 
-  return query;
+  return { ...query, isLoading: isLoading || query.isLoading };
 }
 
 export { useUserPhotos };
