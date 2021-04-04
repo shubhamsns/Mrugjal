@@ -1,10 +1,12 @@
-import { useAuth } from 'context/auth.context';
 import { Link } from 'react-router-dom';
+
+import { useFirestoreUser } from 'hooks/use-firestore-user';
+
 import { CloudinaryImage } from './cloudinary-image';
 import { SearchBar } from './searchbar';
 
 function BottomNav() {
-  const user = useAuth();
+  const { user } = useFirestoreUser();
 
   return (
     <nav
@@ -60,7 +62,7 @@ function BottomNav() {
       <SearchBar isBottom />
 
       <Link
-        to={`/u/${user.displayName}`}
+        to={`/u/${user.username}`}
         title="Profile"
         aria-label="Profile page"
         className="ml-3.5 min-w-max"
@@ -68,7 +70,7 @@ function BottomNav() {
         {user.photoURL ? (
           <CloudinaryImage
             src={user.photoURL}
-            alt={`${user.displayName} profile`}
+            alt={`${user.username} profile`}
             size="80"
             type="profile"
             className="rounded-full h-7 w-7"
