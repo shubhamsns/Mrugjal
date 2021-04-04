@@ -9,7 +9,7 @@ function useUserPhotos() {
   } = useFirestoreUser();
 
   const query = useQuery({
-    queryKey: ['user', 'timeline'],
+    queryKey: ['user', 'timeline', following],
     queryFn: () => getFollowingUserPhotosByUserId(userId, following),
     select: (data) => {
       data.sort((a, b) => b.dateCreated - a.dateCreated);

@@ -49,6 +49,7 @@ function Post({ postData }) {
 
         <div className="col-span-4 lg:col-span-3 flex flex-col lg:max-h-img-base max-h-img-lg">
           <Header postUser={postData.user} postDocId={docId} />
+
           <Comments
             caption={caption}
             postUser={postData.user}

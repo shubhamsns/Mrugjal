@@ -93,10 +93,7 @@ function Details({ profileData, postCount, userData }) {
     );
 
     // for fresh timeline
-    queryClient.setQueryData(['user', 'timeline'], []);
-    queryClient.setQueryData(['suggested-profile', user.userId], (data) =>
-      data.filter((d) => d.userId !== userData.userId),
-    );
+    queryClient.invalidateQueries(['user', 'firestore']);
   }
 
   useEffect(() => {

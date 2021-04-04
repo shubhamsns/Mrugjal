@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import { addPostComments } from 'services/firebase';
-import { useAuth } from 'context/auth.context';
+import { useFirestoreUser } from 'hooks/use-firestore-user';
 
 function AddComment({ setPostComments, commentInputRef, postDocId }) {
   const [newCommentValue, setNewCommentValue] = useState('');
-  const user = useAuth();
+  const { user } = useFirestoreUser();
 
   const handleSubmitComment = (e) => {
     e.preventDefault();
@@ -13,9 +13,9 @@ function AddComment({ setPostComments, commentInputRef, postDocId }) {
     if (newCommentValue.length) {
       const newComment = {
         commentId: uuid(),
-        userId: user.uid,
+        userId: user.userId,
         comment: newCommentValue,
-        username: user.displayName,
+        username: user.username,
         photoURL: user.photoURL,
         dateCreated: Date.now(),
       };
