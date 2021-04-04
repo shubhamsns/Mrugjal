@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 function NotFound() {
   useEffect(() => {
-    document.title = 'Not found - Instagram';
+    document.title = 'Not found - Mrugjal';
   }, []);
 
   return (

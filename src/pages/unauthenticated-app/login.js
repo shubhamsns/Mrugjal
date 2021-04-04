@@ -15,7 +15,7 @@ function Login() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    document.title = 'Login - Instagram';
+    document.title = 'Login - Mrugjal';
   }, []);
 
   const { control, errors, handleSubmit, reset } = useForm({
@@ -44,7 +44,7 @@ function Login() {
         <h1 className="flex justify-center w-full">
           <img
             src="/images/mrugjal-light.png"
-            alt="Instagram"
+            alt="Mrugjal logo"
             className="mt-2 w-6/12 mb-4"
           />
         </h1>

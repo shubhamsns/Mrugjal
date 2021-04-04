@@ -18,7 +18,7 @@ function Profile() {
 
   useEffect(() => {
     if (user) {
-      document.title = `${user.userInfo.fullName} (@${user.username}) - Instagram profile`;
+      document.title = `${user.userInfo.fullName} (@${user.username}) - Mrugjal profile`;
     }
   }, [user]);
 

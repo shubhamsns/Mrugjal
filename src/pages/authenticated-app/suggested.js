@@ -28,7 +28,7 @@ function Suggested() {
   }, [user.userId]);
 
   useEffect(() => {
-    document.title = `Suggested People • Instagram`;
+    document.title = `Suggested People • Mrugjal`;
   }, []);
 
   return (

@@ -16,7 +16,7 @@ function Explore() {
   console.log(data);
 
   useEffect(() => {
-    document.title = `Explore • Instagram`;
+    document.title = `Explore • Mrugjal`;
   }, []);
 
   return (

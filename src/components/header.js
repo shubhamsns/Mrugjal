@@ -41,7 +41,7 @@ function Header() {
         >
           <img
             src="/images/mrugjal-light.png"
-            alt="Instagram"
+            alt="mrugjal-logo"
             className="w-36 h-full"
           />
         </Link>
