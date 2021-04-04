@@ -40,7 +40,6 @@ function AddPost({ userData, displayModal, setDisplayStatus }) {
   const uploadPostDataMutation = useMutation((data) => createPost(data), {
     onSuccess: (_, variables) => {
       handleModalClose();
-      console.log(variables, _);
       history.push(`/p/${variables.photoId}`);
     },
   });

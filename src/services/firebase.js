@@ -399,7 +399,6 @@ async function getPostWithMetaByPostId(postId, loggedInUserId = null) {
     .get();
 
   const [post] = docs.map((doc) => ({ ...doc.data(), docId: doc.id }));
-  console.log(`post`, post);
 
   const user = await getUserDataByUserId(post.userId);
 

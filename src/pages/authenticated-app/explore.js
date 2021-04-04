@@ -13,8 +13,6 @@ function Explore() {
     queryFn: () => getExplorePhotos(user.uid, 21),
   });
 
-  console.log(data);
-
   useEffect(() => {
     document.title = `Explore • Mrugjal`;
   }, []);
