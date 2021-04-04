@@ -43,7 +43,7 @@ function SavedCollection({ userSavedPosts }) {
   }
 
   return (
-    <ul className="grid grid-cols-3 gap-8 mt-4 pb-12">
+    <ul className="flex flex-col sm:grid sm:grid-cols-2 md:grid-cols-3 md:gap-6 sm:gap-4 mt-4 pb-12">
       <Gallery photos={savedPhotos} isLoading={isLoading} />
     </ul>
   );
