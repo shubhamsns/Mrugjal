@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
 
 import { Header } from 'components/header';
 import { NotFound } from 'pages/404';
@@ -8,6 +8,25 @@ import { Dashboard } from './dashboard';
 import { Profile } from './profile';
 import { Explore } from './explore';
 import { PostPage } from './post';
+import { Suggested } from './suggested';
+
+function ExploreRoutes() {
+  const { path } = useRouteMatch();
+
+  return (
+    <Switch>
+      <Route path={`${path}/photos`}>
+        <Explore />
+      </Route>
+
+      <Route path={`${path}/people/suggestions`}>
+        <Suggested />
+      </Route>
+
+      <Redirect to={`${path}/photos`} />
+    </Switch>
+  );
+}
 
 function AuthenticatedRoutes() {
   return (
@@ -25,7 +44,7 @@ function AuthenticatedRoutes() {
       </Route>
 
       <Route path="/explore">
-        <Explore />
+        <ExploreRoutes />
       </Route>
 
       <Route path="/not-found">

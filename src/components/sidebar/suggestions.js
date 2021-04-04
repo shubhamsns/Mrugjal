@@ -26,7 +26,10 @@ function Suggestions({ userData, userFollowing }) {
         <p className="font-semibold text-gray-500 text-sm">
           Suggestions For You
         </p>
-        <Link to="/suggessions" className="text-xs py-1 px-2 font-semibold">
+        <Link
+          to="/explore/people/suggestions"
+          className="text-xs py-1 px-2 font-semibold"
+        >
           See All
         </Link>
       </div>
