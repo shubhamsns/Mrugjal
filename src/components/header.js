@@ -249,6 +249,7 @@ function Header() {
 
       {/* logout modal */}
       <Modal
+        maxW="md"
         showHeader
         isOpen={logoutModalStatus}
         onClose={() => setLogoutModalStatus(false)}
