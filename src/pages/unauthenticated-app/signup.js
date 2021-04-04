@@ -81,7 +81,7 @@ function Signup() {
       <div className="flex flex-col items-center bg-white p-4 border border-gray-primary mb-4 rounded">
         <h1 className="flex justify-center w-full">
           <img
-            src="/images/logo.png"
+            src="/images/mrugjal-light.png"
             alt="Instagram"
             className="mt-2 w-6/12 mb-4"
           />
