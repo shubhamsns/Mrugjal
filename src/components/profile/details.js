@@ -124,7 +124,7 @@ function Details({ profileData, postCount, userData }) {
       <div className="container flex justify-center col-span-2 sm:col-auto">
         <button
           type="button"
-          onClick={() => (isCurrentUser ? onChangeAvatarOpen : null)}
+          onClick={() => (isCurrentUser ? onChangeAvatarOpen() : null)}
         >
           {profileData.photoURL ? (
             <div className="w-32 h-32 sm:h-40 sm:w-40 min-w-max mr-3">
