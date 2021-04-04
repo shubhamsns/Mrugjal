@@ -55,7 +55,7 @@ function Signup() {
                 bio: '',
               },
               followers: [],
-              following: ['3rF7l0AfZlYZJgWA4MpSxtrHCzh1'],
+              following: [],
               emailAddress: data.email,
               photoURL: '',
               dateCreated: Date.now(),

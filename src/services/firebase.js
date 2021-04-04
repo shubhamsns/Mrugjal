@@ -69,7 +69,7 @@ async function getSuggestedProfilesByUserId(
     .map((doc) => ({ ...doc.data(), docId: doc.id }))
     .filter(
       (profile) =>
-        profile.userId !== userId && !userFollowing.includes(profile.userId),
+        profile.userId !== userId && !userFollowing?.includes(profile.userId),
     );
 }
 
@@ -399,6 +399,7 @@ async function getPostWithMetaByPostId(postId, loggedInUserId = null) {
     .get();
 
   const [post] = docs.map((doc) => ({ ...doc.data(), docId: doc.id }));
+  console.log(`post`, post);
 
   const user = await getUserDataByUserId(post.userId);
 

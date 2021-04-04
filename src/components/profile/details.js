@@ -70,7 +70,7 @@ function Details({ profileData, postCount, userData }) {
   );
 
   const isLoading = isAvatarUploading || isUpdatingDatabase;
-
+  // current logged in user can update avatar and settings so
   const isCurrentUser = username === user.username;
 
   async function handleToggleFollowUser() {
@@ -90,6 +90,12 @@ function Details({ profileData, postCount, userData }) {
       profileData.userId,
       userData.userId,
       isFollowingProfile,
+    );
+
+    // for fresh timeline
+    queryClient.setQueryData(['user', 'timeline'], []);
+    queryClient.setQueryData(['suggested-profile', user.userId], (data) =>
+      data.filter((d) => d.userId !== userData.userId),
     );
   }
 

@@ -18,7 +18,10 @@ function Sidebar() {
         userData={{ username, userInfo, photoURL, verifiedUser }}
         isLoading={isLoading}
       />
-      <Suggestions userId={userId} userFollowing={following} />
+      <Suggestions
+        userData={{ username, userId, photoURL }}
+        userFollowing={following}
+      />
     </aside>
   );
 }

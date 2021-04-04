@@ -5,23 +5,36 @@ import {
   updateUserFollowersField,
   updateUserFollowingField,
 } from 'services/firebase';
-import { useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
+import { CloudinaryImage } from 'components/cloudinary-image';
 
-function SuggestedProfile({ suggestedUser, currentUserId }) {
+function SuggestedProfile({ suggestedUser, currentUser, secondary }) {
   const [isUserFollowed, setIsUserFollowed] = useState(false);
   const queryClient = useQueryClient();
 
-  async function handleFollowUserAction() {
-    setIsUserFollowed(true);
+  const followersMutation = useMutation(
+    () =>
+      updateUserFollowersField(suggestedUser.docId, currentUser.userId, false),
+    {
+      onSuccess: () => {
+        setIsUserFollowed(true);
+        queryClient.invalidateQueries(['user', 'firestore']);
+      },
+    },
+  );
 
-    await updateUserFollowingField(suggestedUser.userId, currentUserId, false);
-    await updateUserFollowersField(suggestedUser.docId, currentUserId, false);
-
-    queryClient.invalidateQueries(['user']);
-  }
+  const followingMutation = useMutation(
+    () =>
+      updateUserFollowingField(suggestedUser.userId, currentUser.userId, false),
+    {
+      onSuccess: () => {
+        followersMutation.mutate();
+      },
+    },
+  );
 
   const isSuggestedUserFollower = suggestedUser.following.includes(
-    currentUserId,
+    currentUser.userId,
   );
 
   if (isUserFollowed) return null;
@@ -30,15 +43,19 @@ function SuggestedProfile({ suggestedUser, currentUserId }) {
     <div className="flex flex-row items-center justify-between">
       <div className="flex items-center justify-between">
         <Link to={`/u/${suggestedUser.username}`}>
-          <img
-            className="rounded-full w-8 flex mr-3"
+          <CloudinaryImage
             src={suggestedUser.photoURL}
-            alt=""
+            alt={`${suggestedUser.username} profile`}
+            size={secondary ? '48' : '42'}
+            type="profile"
+            className={`rounded-full ${
+              secondary ? 'h-12 w-12' : 'h-10 w-10'
+            } flex mr-3.5`}
           />
         </Link>
         <div>
           <Link
-            to={`/p/${suggestedUser.username}`}
+            to={`/u/${suggestedUser.username}`}
             className="hover:underline flex"
           >
             <p className="font-semibold text-sm mb-0.5 max-w-max">
@@ -59,6 +76,11 @@ function SuggestedProfile({ suggestedUser, currentUserId }) {
               </svg>
             )}
           </Link>
+          {secondary && (
+            <p className="text-sm text-gray-500">
+              {suggestedUser.userInfo.fullName}
+            </p>
+          )}
           <p className="text-xs text-gray-500">
             {isSuggestedUserFollower ? 'Follows you' : 'Suggested for you'}
           </p>
@@ -68,10 +90,14 @@ function SuggestedProfile({ suggestedUser, currentUserId }) {
       <button
         type="button"
         aria-label={`Follow ${suggestedUser.username} profile`}
-        className="text-sm font-bold text-blue-medium py-1 px-2"
-        onClick={handleFollowUserAction}
+        className={`${
+          secondary
+            ? 'text-sm text-white font-semibold bg-blue-medium py-1.5 px-2.5 rounded'
+            : 'text-xs font-bold text-blue-medium py-1 px-2'
+        }`}
+        onClick={followingMutation.mutate}
         onKeyDown={(event) => {
-          if (event.key === 'Enter') handleFollowUserAction();
+          if (event.key === 'Enter') followingMutation.mutate();
         }}
       >
         Follow
@@ -79,17 +105,28 @@ function SuggestedProfile({ suggestedUser, currentUserId }) {
     </div>
   );
 }
+SuggestedProfile.defaultProps = {
+  secondary: false,
+};
 
 SuggestedProfile.propTypes = {
-  currentUserId: PropTypes.string.isRequired,
+  currentUser: PropTypes.shape({
+    userId: PropTypes.string,
+    username: PropTypes.string,
+    photoURL: PropTypes.string,
+  }).isRequired,
   suggestedUser: PropTypes.shape({
     username: PropTypes.string,
     docId: PropTypes.string,
     userId: PropTypes.string,
-    // photoURL: PropTypes.string,
+    photoURL: PropTypes.string,
     following: PropTypes.arrayOf(PropTypes.string),
     verifiedUser: PropTypes.bool,
+    userInfo: PropTypes.shape({
+      fullName: PropTypes.string.isRequired,
+    }),
   }).isRequired,
+  secondary: PropTypes.bool,
 };
 
 export { SuggestedProfile };

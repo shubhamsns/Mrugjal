@@ -19,7 +19,7 @@ function User({ userData, isLoading }) {
             alt={`${userData.username} profile`}
             size="65"
             type="profile"
-            className="rounded-full h-16 w-16 flex min-w-max"
+            className="rounded-full h-16 w-16 flex"
           />
         ) : (
           <svg
