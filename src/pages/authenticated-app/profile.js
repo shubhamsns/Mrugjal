@@ -8,7 +8,7 @@ function Profile() {
   const history = useHistory();
   const { username } = useParams();
 
-  const { data: user, isLoading } = useQuery({
+  const { data: user } = useQuery({
     queryKey: ['profile', username],
     queryFn: () => getUserDataByUsername(username),
     onError() {

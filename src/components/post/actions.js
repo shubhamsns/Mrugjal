@@ -12,7 +12,6 @@ import {
 function Actions({
   postDocId,
   postId,
-  userId,
   totalLikes,
   likedPost,
   savedPost,

@@ -25,6 +25,7 @@ function Suggested() {
     if (user.userId) {
       getSuggestedProfiles();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user.userId]);
 
   useEffect(() => {

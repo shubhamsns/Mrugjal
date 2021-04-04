@@ -1,5 +1,4 @@
 /* eslint-disable no-nested-ternary */
-import { useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import { useQuery } from 'react-query';
 import {
@@ -7,7 +6,6 @@ import {
   Switch,
   useRouteMatch,
   NavLink,
-  Link,
   Redirect,
 } from 'react-router-dom';
 import PropTypes from 'prop-types';
