@@ -75,6 +75,32 @@ function Header() {
             </svg>
           </button>
 
+          <button
+            type="button"
+            title="Sign Out"
+            aria-label="Sign Out"
+            className="sm:hidden"
+            onClick={() => setLogoutModalStatus(true)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') setLogoutModalStatus(true);
+            }}
+          >
+            <svg
+              className="w-7 text-black-light cursor-pointer active:text-gray-500"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1}
+                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+              />
+            </svg>
+          </button>
+
           <Link
             to="/dashboard"
             aria-label="dashboard"
@@ -249,28 +275,25 @@ function Header() {
 
       {/* logout modal */}
       <Modal
-        maxW="md"
-        showHeader
+        maxW="sm"
+        showHeader={false}
         isOpen={logoutModalStatus}
         onClose={() => setLogoutModalStatus(false)}
-        title="Do you want to Logout?"
+        className="rounded-xl"
       >
-        <div className="flex justify-around p-4">
-          <button
-            type="button"
-            onClick={() => setLogoutModalStatus(false)}
-            className=" font-bold text-gray-base text-xl mr-4"
-          >
-            No
-          </button>
-          <button
-            type="button"
-            className="font-bold text-blue-medium text-xl mr-2"
-            onClick={handleLogout}
-          >
-            Yes
-          </button>
+        <div className="flex flex-col items-center pt-5">
+          <p className="text-black-light text-xl font-semibold mb-6">
+            Are you Sure?
+          </p>
         </div>
+        <button
+          type="button"
+          aria-label="Upload Photo"
+          className="text-red-primary text-center border-t border-b border-gray-primary cursor-pointer w-full py-2.5 px-2 font-bold text-sm"
+          onClick={handleLogout}
+        >
+          Logout
+        </button>
       </Modal>
 
       {/* add post modal */}
