@@ -41,4 +41,4 @@ Here is a list of technologies used:
 
 This project is mimicking the famous [Instabram by Facebook](https://www.instagram.com/) web application with no intent of realeasing or advertising the use of the content in this repo. Being just a demo app!!!
 
-Project takes different approch than [@karlhadwen](https://github.com/karlhadwen)'s base instagram build in terms of artitecture and choice of libraries, also comes with addition of new features and code changes.
+Project takes different approch than [@karlhadwen](https://github.com/karlhadwen)'s base instagram build in terms of Architecture and choice of libraries, also comes with addition of new features and code changes.
