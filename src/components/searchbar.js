@@ -49,7 +49,7 @@ function SearchBar({ className, isBottom }) {
         <ul
           className={`absolute bg-white w-full py-3 max-w-sm ${
             isBottom ? 'bottom-9' : 'top-8'
-          } shadow-md rounded border border-gray-100`}
+          } shadow-md rounded border border-gray-100 z-40`}
           style={{ minWidth: '300px' }}
         >
           {resultsData.length === 0 && (
