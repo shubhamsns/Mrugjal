@@ -134,15 +134,16 @@ async function updateUserFollowersField(
  * @return {Promise<Array<{}>>} A promise of type object array.
  */
 async function getFollowingUserPhotosByUserId(userId, userFollowing) {
-  const { docs } = await database
-    .collection('photos')
-    .where('userId', 'in', userFollowing)
-    .get();
+  const photosPromises = userFollowing.map((userId) =>
+    // eslint-disable-next-line no-use-before-define
+    getUserPhotosByUserId(userId),
+  );
 
-  const userFollowedPhotos = docs.map((doc) => ({
-    ...doc.data(),
-    docId: doc.id,
-  }));
+  const userFollowedPhotosData = await Promise.all(photosPromises);
+
+  const userFollowedPhotos = userFollowedPhotosData
+    .flat()
+    .sort((a, b) => b.createdAt - a.createdAt);
 
   const photosWithUserData = await Promise.all(
     userFollowedPhotos.map(async (photo) => {
