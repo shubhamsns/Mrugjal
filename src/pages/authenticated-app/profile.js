@@ -1,8 +1,9 @@
-import { UserProfile } from 'components/profile';
 import { useEffect } from 'react';
 import { useQuery } from 'react-query';
 import { useHistory, useParams } from 'react-router-dom';
+
 import { getUserDataByUsername } from 'services/firebase';
+import { UserProfile } from 'components/profile';
 
 function Profile() {
   const history = useHistory();
