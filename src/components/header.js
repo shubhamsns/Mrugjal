@@ -49,31 +49,7 @@ function Header() {
         <SearchBar className="hidden sm:block" />
 
         <nav className="text-gray-700 text-center flex items-center">
-          <button
-            title="add post"
-            onClick={() => setPostModalStatus((prev) => !prev)}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter') setPostModalStatus((prev) => !prev);
-            }}
-            type="button"
-            aria-label="upload image"
-            className="sm:mr-3.5 mr-2"
-          >
-            <svg
-              className="w-7 text-black-light cursor-pointer active:text-gray-500"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1}
-                d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-              />
-            </svg>
-          </button>
+          <AddPost userData={user} />
 
           <button
             type="button"
@@ -274,35 +250,39 @@ function Header() {
       </div>
 
       {/* logout modal */}
-      <Modal
-        maxW="sm"
-        showHeader={false}
-        isOpen={logoutModalStatus}
+      <LogoutModal
+        open={logoutModalStatus}
         onClose={() => setLogoutModalStatus(false)}
-        className="rounded-xl"
-      >
-        <div className="flex flex-col items-center pt-5">
-          <p className="text-black-light text-xl font-semibold mb-6">
-            Are you Sure?
-          </p>
-        </div>
-        <button
-          type="button"
-          aria-label="Upload Photo"
-          className="text-red-primary text-center border-t border-b border-gray-primary cursor-pointer w-full py-2.5 px-2 font-bold text-sm"
-          onClick={handleLogout}
-        >
-          Logout
-        </button>
-      </Modal>
-
-      {/* add post modal */}
-      <AddPost
-        userData={user}
-        displayModal={postModalStatus}
-        setDisplayStatus={setPostModalStatus}
+        handleLogout={handleLogout}
       />
     </header>
+  );
+}
+
+function LogoutModal({ open, onClose, handleLogout }) {
+  return (
+    <Modal
+      maxW="md"
+      showHeader={false}
+      isOpen={open}
+      onClose={onClose}
+      className="rounded-xl"
+    >
+      <div className="flex flex-col items-center pt-5">
+        <p className="text-black-light text-xl font-semibold mb-6">
+          Are you Sure?
+        </p>
+      </div>
+
+      <button
+        type="button"
+        aria-label="Upload Photo"
+        className="text-red-primary text-center border-t border-b border-gray-primary cursor-pointer w-full py-2.5 px-2 font-bold text-sm"
+        onClick={handleLogout}
+      >
+        Logout
+      </button>
+    </Modal>
   );
 }
 

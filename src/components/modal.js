@@ -1,3 +1,5 @@
+import ReactDom from 'react-dom';
+import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 function Modal({
@@ -10,11 +12,22 @@ function Modal({
   className,
   ...rest
 }) {
-  return (
+  const ref = useRef();
+
+  useEffect(() => {
+    if (isOpen) {
+      ref.current.focus();
+    }
+  }, [isOpen]);
+
+  if (!isOpen) return null;
+
+  return ReactDom.createPortal(
     <div
+      role="dialog"
       className={`${
         isOpen ? 'fixed' : 'hidden'
-      } flex justify-center items-center inset-0 z-40`}
+      } flex justify-center items-center inset-0 z-40 mx-2`}
     >
       <div
         aria-hidden
@@ -22,7 +35,7 @@ function Modal({
         onClick={onClose}
       />
       <div
-        className={`absolute z-40 bg-white max-w-${maxW} w-full flex flex-col border border-gray-primary shadow-lg ${className}`}
+        className={`absolute z-40 bg-white max-w-screen-${maxW} w-full flex flex-col border border-gray-primary shadow-lg ${className}`}
         role="dialog"
         aria-modal="true"
         {...rest}
@@ -37,6 +50,7 @@ function Modal({
             aria-label="Close modal"
             onClick={onClose}
             className="z-10"
+            ref={ref}
           >
             <svg
               className="w-7 text-black-light cursor-pointer"
@@ -68,13 +82,15 @@ function Modal({
             type="button"
             aria-label="Close modal"
             onClick={onClose}
-            className="text-sm text-black-light text-center py-2.5 w-full px-2"
+            className="text-sm text-black-light text-center py-2.5 px-2"
+            ref={ref}
           >
             Cancel
           </button>
         )}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
 
