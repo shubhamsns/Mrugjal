@@ -36,7 +36,7 @@ function Header() {
         <Link
           aria-label="instagram logo"
           title="instagram branding"
-          to="/dashboard"
+          to="/timeline"
         >
           <img
             src="/images/mrugjal-light.png"
@@ -77,7 +77,7 @@ function Header() {
           </button>
 
           <Link
-            to="/dashboard"
+            to="/timeline"
             aria-label="dashboard"
             title="Dashboard"
             className="mr-3.5 hidden sm:block"

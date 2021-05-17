@@ -4,7 +4,7 @@ import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
 import { Header } from 'components/header';
 import { NotFound } from 'pages/404';
 import { BottomNav } from 'components/bottom-nav';
-import { Dashboard } from './dashboard';
+import { Dashboard } from './timeline';
 import { Profile } from './profile';
 import { Explore } from './explore';
 import { PostPage } from './post';
@@ -31,7 +31,7 @@ function ExploreRoutes() {
 function AuthenticatedRoutes() {
   return (
     <Switch>
-      <Route path="/dashboard">
+      <Route path="/timeline">
         <Dashboard />
       </Route>
 
@@ -51,7 +51,7 @@ function AuthenticatedRoutes() {
         <NotFound />
       </Route>
 
-      <Redirect to="/dashboard" />
+      <Redirect to="/timeline" />
     </Switch>
   );
 }

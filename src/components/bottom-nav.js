@@ -15,7 +15,7 @@ function BottomNav() {
     >
       <div className="flex">
         <Link
-          to="/dashboard"
+          to="/timeline"
           title="Dashboard"
           aria-label="Dashboard"
           className="mr-3.5"
