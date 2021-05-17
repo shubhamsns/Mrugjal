@@ -16,7 +16,7 @@ function Timeline() {
     );
   }
 
-  if (!isLoading && !photos) {
+  if (!isLoading && !photos.length) {
     return (
       <main className="container col-span-2 flex flex-col items-center">
         {isError && (
