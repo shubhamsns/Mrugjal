@@ -11,7 +11,7 @@ import useDisclosure from 'hooks/use-disclosure';
 import { CloudinaryImage } from 'components/cloudinary-image';
 
 function AddPost({ userData }) {
-  const { isOpen, onClose, onOpen, onToggle } = useDisclosure();
+  const { isOpen, onClose, onToggle } = useDisclosure();
 
   const history = useHistory();
 

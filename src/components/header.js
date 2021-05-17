@@ -20,7 +20,6 @@ function Header() {
   const { firebaseApp } = useFirebase();
   const { user } = useFirestoreUser();
 
-  const [postModalStatus, setPostModalStatus] = useState(false);
   const [logoutModalStatus, setLogoutModalStatus] = useState(false);
   const { isOpen, onClose, onToggle } = useDisclosure();
 
