@@ -4,11 +4,15 @@ import { useHistory } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 import { useMutation } from 'react-query';
 
-import { CloudinaryImage } from 'components/cloudinary-image';
+import { Modal } from 'components/modal';
 import { uploadUnsignedImage } from 'services/cloudinary';
 import { createPost } from 'services/firebase';
+import useDisclosure from 'hooks/use-disclosure';
+import { CloudinaryImage } from 'components/cloudinary-image';
 
-function AddPost({ userData, displayModal, setDisplayStatus }) {
+function AddPost({ userData }) {
+  const { isOpen, onClose, onOpen, onToggle } = useDisclosure();
+
   const history = useHistory();
 
   const [uploadedImage, setUploadedImage] = useState(null);
@@ -34,7 +38,7 @@ function AddPost({ userData, displayModal, setDisplayStatus }) {
     setPreviewImage(null);
     setUploadedImage(null);
     setPostMessage('');
-    setDisplayStatus((prev) => !prev);
+    onClose();
   }
 
   const uploadPostDataMutation = useMutation((data) => createPost(data), {
@@ -75,44 +79,34 @@ function AddPost({ userData, displayModal, setDisplayStatus }) {
   };
 
   return (
-    <div
-      className={`${
-        displayModal ? 'absolute' : 'hidden'
-      } flex justify-center items-center inset-0`}
-    >
-      <div
-        aria-hidden
-        className="fixed z-30 inset-0 bg-black-faded"
-        onClick={handleModalClose}
-      />
-      <div
-        className="absolute z-40 bg-white max-w-screen-sm w-full flex flex-col border border-gray-primary shadow-lg"
-        role="dialog"
-        aria-modal="true"
-        aria-label="Add post modal"
+    <>
+      <button
+        title="add post"
+        onClick={onToggle}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter') onToggle();
+        }}
+        type="button"
+        aria-label="upload image"
+        className="sm:mr-3.5 mr-2"
       >
-        <div className="p-2.5 px-3.5 border-b border-gray-primary w-full flex">
-          <button
-            type="button"
-            aria-label="Close modal"
-            onClick={handleModalClose}
-          >
-            <svg
-              className="w-7 text-black-light cursor-pointer"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
-        </div>
+        <svg
+          className="w-7 text-black-light cursor-pointer active:text-gray-500"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1}
+            d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+          />
+        </svg>
+      </button>
+
+      <Modal isOpen={isOpen} onClose={onClose} maxW="md">
         <div className="flex p-2 px-3.5">
           {userData.photoURL ? (
             <div className=" flex mr-5 min-w-max">
@@ -201,8 +195,8 @@ function AddPost({ userData, displayModal, setDisplayStatus }) {
             </div>
           </form>
         </div>
-      </div>
-    </div>
+      </Modal>
+    </>
   );
 }
 

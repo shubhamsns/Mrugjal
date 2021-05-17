@@ -21,17 +21,17 @@ function Gallery({ photos, withSvg, isLoading }) {
   return (
     <>
       {photos.map((photo) => (
-        <li
+        <Link
+          as="li"
           key={photo.docId}
-          className="relative group flex items-center bg-gray-100 mb-3.5 sm:mb-0"
+          className="relative group flex items-center bg-gray-100 mb-3.5 sm:mb-0 ring-2"
         >
           <CloudinaryImage
             src={photo.imageSrc}
             alt={photo.caption}
-            width="620"
             type="post"
             className="object-fill"
-            style={{ height: '400px' }}
+            size="500"
           />
           {withSvg && (
             <svg
@@ -85,7 +85,7 @@ function Gallery({ photos, withSvg, isLoading }) {
               </p>
             </div>
           </Link>
-        </li>
+        </Link>
       ))}
 
       {/* <LoginPopup isOpen={isOpen} onClose={onClose} /> */}
