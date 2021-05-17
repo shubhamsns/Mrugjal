@@ -24,7 +24,7 @@ function Gallery({ photos, withSvg, isLoading }) {
         <Link
           as="li"
           key={photo.docId}
-          className="relative group flex items-center bg-gray-100 mb-3.5 sm:mb-0 ring-2"
+          className="relative group flex items-center bg-gray-100 mb-3.5 sm:mb-0"
         >
           <CloudinaryImage
             src={photo.imageSrc}

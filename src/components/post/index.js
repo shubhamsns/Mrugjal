@@ -36,7 +36,7 @@ function Post({ postData }) {
 
   return (
     <>
-      <div className="bg-white border border-gray-primary rounded md:grid lg:grid-cols-8 grid-cols-9 mb-14 flex flex-col ring-2">
+      <div className="bg-white border border-gray-primary rounded md:grid lg:grid-cols-8 grid-cols-9 mb-14 flex flex-col">
         <div className="bg-gray-100 col-span-5 lg:col-span-5 flex items-center">
           <CloudinaryImage
             src={imageSrc}

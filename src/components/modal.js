@@ -24,7 +24,6 @@ function Modal({
 
   return ReactDom.createPortal(
     <div
-      role="dialog"
       className={`${
         isOpen ? 'fixed' : 'hidden'
       } flex justify-center items-center inset-0 z-40 mx-2`}

@@ -86,7 +86,7 @@ function UserProfile({ profile }) {
                 to={`${url}/posts`}
                 type="button"
                 aria-label="Show your posts"
-                className="flex uppercase items-center font-bold text-xs tracking-wider py-4 focus:ring-2 focus:ring-offset-blue-medium border-transparent opacity-50"
+                className="flex uppercase items-center font-bold text-xs tracking-wider py-4 border-transparent opacity-50"
               >
                 <svg
                   className="w-4 mr-1"
@@ -110,7 +110,7 @@ function UserProfile({ profile }) {
                 to={`${url}/saved`}
                 type="button"
                 aria-label="Show saved posts"
-                className="flex uppercase items-center font-bold text-xs tracking-wider py-4 focus:ring-2 focus:ring-offset-blue-medium border-transparent opacity-50"
+                className="flex uppercase items-center font-bold text-xs tracking-wider py-4 border-transparent opacity-50"
               >
                 <svg
                   className="w-4 mr-0.5"
