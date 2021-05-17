@@ -4,7 +4,7 @@ import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
 import { Header } from 'components/header';
 import { NotFound } from 'pages/404';
 import { BottomNav } from 'components/bottom-nav';
-import { Dashboard } from './timeline';
+import { Dashboard } from './dashboard';
 import { Profile } from './profile';
 import { Explore } from './explore';
 import { PostPage } from './post';
