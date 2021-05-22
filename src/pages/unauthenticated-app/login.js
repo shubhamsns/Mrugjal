@@ -1,3 +1,4 @@
+import { useEffect, useState, useRef } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import { useForm } from 'react-hook-form';
@@ -6,13 +7,14 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useFirebase } from 'context/firebase.context';
 import { Form, Input } from 'components/form';
 import { UserLoginSchema } from 'helpers/validations';
-import { useEffect, useState } from 'react';
 
 function Login() {
   const history = useHistory();
   const { firebaseApp } = useFirebase();
 
   const [error, setError] = useState('');
+
+  const [isGuestLogin, setIsGuestLogin] = useState(false);
 
   useEffect(() => {
     document.title = 'Login - Mrugjal';
@@ -81,7 +83,35 @@ function Login() {
               isLoading ? 'opacity-50' : ''
             }`}
           >
-            {isLoading ? 'Logging in...' : 'Login'}
+            {isLoading && !isGuestLogin ? 'Logging in...' : 'Login'}
+          </button>
+
+          <div className="border-b mt-4 mb-4 bg-gray-base" />
+
+          <button
+            type="button"
+            disabled={isLoading}
+            onKeyUp={(e) => {
+              setIsGuestLogin(true);
+              if (e.key === 'Enter') {
+                mutate({
+                  email: 'happybrahmagupta@email.com',
+                  password: 'password',
+                });
+              }
+            }}
+            onClick={() => {
+              setIsGuestLogin(true);
+              mutate({
+                email: 'happybrahmagupta@email.com',
+                password: 'password',
+              });
+            }}
+            className={`bg-blue-medium text-white w-full rounded h-8 font-bold ${
+              isLoading ? 'opacity-50' : ''
+            }`}
+          >
+            {isLoading && isGuestLogin ? 'Logging in...' : 'Guest Login'}
           </button>
         </Form>
       </div>
